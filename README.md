@@ -1,7 +1,5 @@
 # Arabic console
 
-**[العربية](README.ar.md)** | English
-
 An Arabic-native command layer for the Linux kernel text console (VT).
 
 The kernel console paints one codepoint per cell, left to right, with no shaping and no
