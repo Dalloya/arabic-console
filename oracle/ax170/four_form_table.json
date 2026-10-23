@@ -1,0 +1,1973 @@
+{
+  "source_rom": "ax170arab.rom",
+  "rom_sha256": "91c33f3304c437c151b9ad877019463d1b68e1dbaa792a6b42a7a890f8c55c34",
+  "table_file_start": "0x1AF7",
+  "table_file_end_inclusive": "0x1CEE",
+  "record_order": [
+    "initial",
+    "isolated",
+    "medial",
+    "final"
+  ],
+  "pair_order": [
+    "glyph_slot",
+    "attribute"
+  ],
+  "note": "0x1C00 is inside a four-form record; 0x1CEF starts the following slot mapping. Attr is not a glyph and does not imply Unicode form.",
+  "groups": [
+    {
+      "index": 0,
+      "file_offset": "0x1AF7",
+      "letter": "ء",
+      "forms": {
+        "initial": {
+          "slot": "0xF0",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0621",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xF0",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0621",
+          "unicode": "U+FE80"
+        },
+        "medial": {
+          "slot": "0xF0",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0621",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xF0",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0621",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 1,
+      "file_offset": "0x1AFF",
+      "letter": "آ",
+      "forms": {
+        "initial": {
+          "slot": "0xD7",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0622",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xD7",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0622",
+          "unicode": "U+FE81"
+        },
+        "medial": {
+          "slot": "0xD8",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FE82",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xD8",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FE82",
+          "unicode": "U+FE82"
+        }
+      }
+    },
+    {
+      "index": 2,
+      "file_offset": "0x1B07",
+      "letter": "أ",
+      "forms": {
+        "initial": {
+          "slot": "0xD9",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0623",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xD9",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0623",
+          "unicode": "U+FE83"
+        },
+        "medial": {
+          "slot": "0xDA",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FE84",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xDA",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FE84",
+          "unicode": "U+FE84"
+        }
+      }
+    },
+    {
+      "index": 3,
+      "file_offset": "0x1B0F",
+      "letter": "ؤ",
+      "forms": {
+        "initial": {
+          "slot": "0xDF",
+          "attribute": "0x06",
+          "glyph_annotation": "U+0624",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xDF",
+          "attribute": "0x06",
+          "glyph_annotation": "U+0624",
+          "unicode": "U+FE85"
+        },
+        "medial": {
+          "slot": "0xDF",
+          "attribute": "0x06",
+          "glyph_annotation": "U+0624",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xDF",
+          "attribute": "0x06",
+          "glyph_annotation": "U+0624",
+          "unicode": "U+FE86"
+        }
+      }
+    },
+    {
+      "index": 4,
+      "file_offset": "0x1B17",
+      "letter": "إ",
+      "forms": {
+        "initial": {
+          "slot": "0xE0",
+          "attribute": "0x07",
+          "glyph_annotation": "U+0625",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xE0",
+          "attribute": "0x07",
+          "glyph_annotation": "U+0625",
+          "unicode": "U+FE87"
+        },
+        "medial": {
+          "slot": "0xE1",
+          "attribute": "0x07",
+          "glyph_annotation": "U+FE88",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xE1",
+          "attribute": "0x07",
+          "glyph_annotation": "U+FE88",
+          "unicode": "U+FE88"
+        }
+      }
+    },
+    {
+      "index": 5,
+      "file_offset": "0x1B1F",
+      "letter": "ئ",
+      "forms": {
+        "initial": {
+          "slot": "0xA1",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FE8C",
+          "unicode": "U+FE8B"
+        },
+        "isolated": {
+          "slot": "0xA2",
+          "attribute": "0x05",
+          "glyph_annotation": "U+0626",
+          "unicode": "U+FE89"
+        },
+        "medial": {
+          "slot": "0xA1",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FE8C",
+          "unicode": "U+FE8C"
+        },
+        "final": {
+          "slot": "0xA2",
+          "attribute": "0x05",
+          "glyph_annotation": "U+0626",
+          "unicode": "U+FE8A"
+        }
+      }
+    },
+    {
+      "index": 6,
+      "file_offset": "0x1B27",
+      "letter": "ا",
+      "forms": {
+        "initial": {
+          "slot": "0xE2",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0627",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xE2",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0627",
+          "unicode": "U+FE8D"
+        },
+        "medial": {
+          "slot": "0xE3",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FE8E",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xE3",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FE8E",
+          "unicode": "U+FE8E"
+        }
+      }
+    },
+    {
+      "index": 7,
+      "file_offset": "0x1B2F",
+      "letter": "ب",
+      "forms": {
+        "initial": {
+          "slot": "0xA3",
+          "attribute": "0x0D",
+          "glyph_annotation": "U+FE92",
+          "unicode": "U+FE91"
+        },
+        "isolated": {
+          "slot": "0xA4",
+          "attribute": "0x0D",
+          "glyph_annotation": "U+0628",
+          "unicode": "U+FE8F"
+        },
+        "medial": {
+          "slot": "0xA3",
+          "attribute": "0x0D",
+          "glyph_annotation": "U+FE92",
+          "unicode": "U+FE92"
+        },
+        "final": {
+          "slot": "0xA4",
+          "attribute": "0x0D",
+          "glyph_annotation": "U+0628",
+          "unicode": "U+FE90"
+        }
+      }
+    },
+    {
+      "index": 8,
+      "file_offset": "0x1B37",
+      "letter": "ة",
+      "forms": {
+        "initial": {
+          "slot": "0xE4",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0629",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xE4",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0629",
+          "unicode": "U+FE93"
+        },
+        "medial": {
+          "slot": "0xE4",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0629",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xE4",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0629",
+          "unicode": "U+FE94"
+        }
+      }
+    },
+    {
+      "index": 9,
+      "file_offset": "0x1B3F",
+      "letter": "ت",
+      "forms": {
+        "initial": {
+          "slot": "0xA5",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FE98",
+          "unicode": "U+FE97"
+        },
+        "isolated": {
+          "slot": "0xA6",
+          "attribute": "0x80",
+          "glyph_annotation": "U+062A",
+          "unicode": "U+FE95"
+        },
+        "medial": {
+          "slot": "0xA5",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FE98",
+          "unicode": "U+FE98"
+        },
+        "final": {
+          "slot": "0xA6",
+          "attribute": "0x80",
+          "glyph_annotation": "U+062A",
+          "unicode": "U+FE96"
+        }
+      }
+    },
+    {
+      "index": 10,
+      "file_offset": "0x1B47",
+      "letter": "ث",
+      "forms": {
+        "initial": {
+          "slot": "0xA7",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FE9C",
+          "unicode": "U+FE9B"
+        },
+        "isolated": {
+          "slot": "0xA8",
+          "attribute": "0x80",
+          "glyph_annotation": "U+062B",
+          "unicode": "U+FE99"
+        },
+        "medial": {
+          "slot": "0xA7",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FE9C",
+          "unicode": "U+FE9C"
+        },
+        "final": {
+          "slot": "0xA8",
+          "attribute": "0x80",
+          "glyph_annotation": "U+062B",
+          "unicode": "U+FE9A"
+        }
+      }
+    },
+    {
+      "index": 11,
+      "file_offset": "0x1B4F",
+      "letter": "ج",
+      "forms": {
+        "initial": {
+          "slot": "0xA9",
+          "attribute": "0x0D",
+          "glyph_annotation": "U+FEA0",
+          "unicode": "U+FE9F"
+        },
+        "isolated": {
+          "slot": "0xAA",
+          "attribute": "0x00",
+          "glyph_annotation": "U+062C",
+          "unicode": "U+FE9D"
+        },
+        "medial": {
+          "slot": "0xA9",
+          "attribute": "0x0D",
+          "glyph_annotation": "U+FEA0",
+          "unicode": "U+FEA0"
+        },
+        "final": {
+          "slot": "0xAA",
+          "attribute": "0x00",
+          "glyph_annotation": "U+062C",
+          "unicode": "U+FE9E"
+        }
+      }
+    },
+    {
+      "index": 12,
+      "file_offset": "0x1B57",
+      "letter": "ح",
+      "forms": {
+        "initial": {
+          "slot": "0xAB",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEA4",
+          "unicode": "U+FEA3"
+        },
+        "isolated": {
+          "slot": "0xAC",
+          "attribute": "0x08",
+          "glyph_annotation": "U+062D",
+          "unicode": "U+FEA1"
+        },
+        "medial": {
+          "slot": "0xAB",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEA4",
+          "unicode": "U+FEA4"
+        },
+        "final": {
+          "slot": "0xAC",
+          "attribute": "0x08",
+          "glyph_annotation": "U+062D",
+          "unicode": "U+FEA2"
+        }
+      }
+    },
+    {
+      "index": 13,
+      "file_offset": "0x1B5F",
+      "letter": "خ",
+      "forms": {
+        "initial": {
+          "slot": "0xAD",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEA8",
+          "unicode": "U+FEA7"
+        },
+        "isolated": {
+          "slot": "0xAE",
+          "attribute": "0x08",
+          "glyph_annotation": "U+062E",
+          "unicode": "U+FEA5"
+        },
+        "medial": {
+          "slot": "0xAD",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEA8",
+          "unicode": "U+FEA8"
+        },
+        "final": {
+          "slot": "0xAE",
+          "attribute": "0x08",
+          "glyph_annotation": "U+062E",
+          "unicode": "U+FEA6"
+        }
+      }
+    },
+    {
+      "index": 14,
+      "file_offset": "0x1B67",
+      "letter": "د",
+      "forms": {
+        "initial": {
+          "slot": "0xE5",
+          "attribute": "0x80",
+          "glyph_annotation": "U+062F",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xE5",
+          "attribute": "0x80",
+          "glyph_annotation": "U+062F",
+          "unicode": "U+FEA9"
+        },
+        "medial": {
+          "slot": "0xE5",
+          "attribute": "0x80",
+          "glyph_annotation": "U+062F",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xE5",
+          "attribute": "0x80",
+          "glyph_annotation": "U+062F",
+          "unicode": "U+FEAA"
+        }
+      }
+    },
+    {
+      "index": 15,
+      "file_offset": "0x1B6F",
+      "letter": "ذ",
+      "forms": {
+        "initial": {
+          "slot": "0xE6",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0630",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xE6",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0630",
+          "unicode": "U+FEAB"
+        },
+        "medial": {
+          "slot": "0xE6",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0630",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xE6",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0630",
+          "unicode": "U+FEAC"
+        }
+      }
+    },
+    {
+      "index": 16,
+      "file_offset": "0x1B77",
+      "letter": "ر",
+      "forms": {
+        "initial": {
+          "slot": "0xE7",
+          "attribute": "0x06",
+          "glyph_annotation": "U+0631",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xE7",
+          "attribute": "0x06",
+          "glyph_annotation": "U+0631",
+          "unicode": "U+FEAD"
+        },
+        "medial": {
+          "slot": "0xE7",
+          "attribute": "0x06",
+          "glyph_annotation": "U+0631",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xE7",
+          "attribute": "0x06",
+          "glyph_annotation": "U+0631",
+          "unicode": "U+FEAE"
+        }
+      }
+    },
+    {
+      "index": 17,
+      "file_offset": "0x1B7F",
+      "letter": "ز",
+      "forms": {
+        "initial": {
+          "slot": "0xE8",
+          "attribute": "0x06",
+          "glyph_annotation": "U+0632",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xE8",
+          "attribute": "0x06",
+          "glyph_annotation": "U+0632",
+          "unicode": "U+FEAF"
+        },
+        "medial": {
+          "slot": "0xE8",
+          "attribute": "0x06",
+          "glyph_annotation": "U+0632",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xE8",
+          "attribute": "0x06",
+          "glyph_annotation": "U+0632",
+          "unicode": "U+FEB0"
+        }
+      }
+    },
+    {
+      "index": 18,
+      "file_offset": "0x1B87",
+      "letter": "س",
+      "forms": {
+        "initial": {
+          "slot": "0xAF",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEB4",
+          "unicode": "U+FEB3"
+        },
+        "isolated": {
+          "slot": "0xB0",
+          "attribute": "0x09",
+          "glyph_annotation": "U+0633",
+          "unicode": "U+FEB1"
+        },
+        "medial": {
+          "slot": "0xAF",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEB4",
+          "unicode": "U+FEB4"
+        },
+        "final": {
+          "slot": "0xB0",
+          "attribute": "0x09",
+          "glyph_annotation": "U+0633",
+          "unicode": "U+FEB2"
+        }
+      }
+    },
+    {
+      "index": 19,
+      "file_offset": "0x1B8F",
+      "letter": "ش",
+      "forms": {
+        "initial": {
+          "slot": "0xB1",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEB8",
+          "unicode": "U+FEB7"
+        },
+        "isolated": {
+          "slot": "0xB2",
+          "attribute": "0x09",
+          "glyph_annotation": "U+0634",
+          "unicode": "U+FEB5"
+        },
+        "medial": {
+          "slot": "0xB1",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEB8",
+          "unicode": "U+FEB8"
+        },
+        "final": {
+          "slot": "0xB2",
+          "attribute": "0x09",
+          "glyph_annotation": "U+0634",
+          "unicode": "U+FEB6"
+        }
+      }
+    },
+    {
+      "index": 20,
+      "file_offset": "0x1B97",
+      "letter": "ص",
+      "forms": {
+        "initial": {
+          "slot": "0xB3",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEBC",
+          "unicode": "U+FEBB"
+        },
+        "isolated": {
+          "slot": "0xB4",
+          "attribute": "0x09",
+          "glyph_annotation": "U+0635",
+          "unicode": "U+FEB9"
+        },
+        "medial": {
+          "slot": "0xB3",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEBC",
+          "unicode": "U+FEBC"
+        },
+        "final": {
+          "slot": "0xB4",
+          "attribute": "0x09",
+          "glyph_annotation": "U+0635",
+          "unicode": "U+FEBA"
+        }
+      }
+    },
+    {
+      "index": 21,
+      "file_offset": "0x1B9F",
+      "letter": "ض",
+      "forms": {
+        "initial": {
+          "slot": "0xB5",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEC0",
+          "unicode": "U+FEBF"
+        },
+        "isolated": {
+          "slot": "0xB6",
+          "attribute": "0x09",
+          "glyph_annotation": "U+0636",
+          "unicode": "U+FEBD"
+        },
+        "medial": {
+          "slot": "0xB5",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEC0",
+          "unicode": "U+FEC0"
+        },
+        "final": {
+          "slot": "0xB6",
+          "attribute": "0x09",
+          "glyph_annotation": "U+0636",
+          "unicode": "U+FEBE"
+        }
+      }
+    },
+    {
+      "index": 22,
+      "file_offset": "0x1BA7",
+      "letter": "ط",
+      "forms": {
+        "initial": {
+          "slot": "0xB7",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0637",
+          "unicode": "U+FEC3"
+        },
+        "isolated": {
+          "slot": "0xB7",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0637",
+          "unicode": "U+FEC1"
+        },
+        "medial": {
+          "slot": "0xB7",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0637",
+          "unicode": "U+FEC4"
+        },
+        "final": {
+          "slot": "0xB7",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0637",
+          "unicode": "U+FEC2"
+        }
+      }
+    },
+    {
+      "index": 23,
+      "file_offset": "0x1BAF",
+      "letter": "ظ",
+      "forms": {
+        "initial": {
+          "slot": "0xB8",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0638",
+          "unicode": "U+FEC7"
+        },
+        "isolated": {
+          "slot": "0xB8",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0638",
+          "unicode": "U+FEC5"
+        },
+        "medial": {
+          "slot": "0xB8",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0638",
+          "unicode": "U+FEC8"
+        },
+        "final": {
+          "slot": "0xB8",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0638",
+          "unicode": "U+FEC6"
+        }
+      }
+    },
+    {
+      "index": 24,
+      "file_offset": "0x1BB7",
+      "letter": "ع",
+      "forms": {
+        "initial": {
+          "slot": "0xB9",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FECB",
+          "unicode": "U+FECB"
+        },
+        "isolated": {
+          "slot": "0xBA",
+          "attribute": "0x08",
+          "glyph_annotation": "U+0639",
+          "unicode": "U+FEC9"
+        },
+        "medial": {
+          "slot": "0xC0",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FECC",
+          "unicode": "U+FECC"
+        },
+        "final": {
+          "slot": "0xC1",
+          "attribute": "0x08",
+          "glyph_annotation": "U+FECA",
+          "unicode": "U+FECA"
+        }
+      }
+    },
+    {
+      "index": 25,
+      "file_offset": "0x1BBF",
+      "letter": "غ",
+      "forms": {
+        "initial": {
+          "slot": "0xC2",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FECF",
+          "unicode": "U+FECF"
+        },
+        "isolated": {
+          "slot": "0xC3",
+          "attribute": "0x08",
+          "glyph_annotation": "U+063A",
+          "unicode": "U+FECD"
+        },
+        "medial": {
+          "slot": "0xC4",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FED0",
+          "unicode": "U+FED0"
+        },
+        "final": {
+          "slot": "0xC5",
+          "attribute": "0x08",
+          "glyph_annotation": "U+FECE",
+          "unicode": "U+FECE"
+        }
+      }
+    },
+    {
+      "index": 26,
+      "file_offset": "0x1BC7",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xBB",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005B",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xBB",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005B",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xBB",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005B",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xBB",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005B",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 27,
+      "file_offset": "0x1BCF",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xBC",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005C",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xBC",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005C",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xBC",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005C",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xBC",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005C",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 28,
+      "file_offset": "0x1BD7",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xBD",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005D",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xBD",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005D",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xBD",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005D",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xBD",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005D",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 29,
+      "file_offset": "0x1BDF",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xBE",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005E",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xBE",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005E",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xBE",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005E",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xBE",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005E",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 30,
+      "file_offset": "0x1BE7",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xBF",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005F",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xBF",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005F",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xBF",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005F",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xBF",
+          "attribute": "0x80",
+          "glyph_annotation": "U+005F",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 31,
+      "file_offset": "0x1BEF",
+      "letter": "ـ",
+      "forms": {
+        "initial": {
+          "slot": "0xF1",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0640",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xF1",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0640",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xF1",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0640",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xF1",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0640",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 32,
+      "file_offset": "0x1BF7",
+      "letter": "ف",
+      "forms": {
+        "initial": {
+          "slot": "0xC6",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FED4",
+          "unicode": "U+FED3"
+        },
+        "isolated": {
+          "slot": "0xC7",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0641",
+          "unicode": "U+FED1"
+        },
+        "medial": {
+          "slot": "0xC6",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FED4",
+          "unicode": "U+FED4"
+        },
+        "final": {
+          "slot": "0xC7",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0641",
+          "unicode": "U+FED2"
+        }
+      }
+    },
+    {
+      "index": 33,
+      "file_offset": "0x1BFF",
+      "letter": "ق",
+      "forms": {
+        "initial": {
+          "slot": "0xC8",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FED8",
+          "unicode": "U+FED7"
+        },
+        "isolated": {
+          "slot": "0xC9",
+          "attribute": "0x0A",
+          "glyph_annotation": "U+0642",
+          "unicode": "U+FED5"
+        },
+        "medial": {
+          "slot": "0xC8",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FED8",
+          "unicode": "U+FED8"
+        },
+        "final": {
+          "slot": "0xC9",
+          "attribute": "0x0A",
+          "glyph_annotation": "U+0642",
+          "unicode": "U+FED6"
+        }
+      }
+    },
+    {
+      "index": 34,
+      "file_offset": "0x1C07",
+      "letter": "ك",
+      "forms": {
+        "initial": {
+          "slot": "0xCA",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEDC",
+          "unicode": "U+FEDB"
+        },
+        "isolated": {
+          "slot": "0xCB",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0643",
+          "unicode": "U+FED9"
+        },
+        "medial": {
+          "slot": "0xCA",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEDC",
+          "unicode": "U+FEDC"
+        },
+        "final": {
+          "slot": "0xCB",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0643",
+          "unicode": "U+FEDA"
+        }
+      }
+    },
+    {
+      "index": 35,
+      "file_offset": "0x1C0F",
+      "letter": "ل",
+      "forms": {
+        "initial": {
+          "slot": "0xCC",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEE0",
+          "unicode": "U+FEDF"
+        },
+        "isolated": {
+          "slot": "0xCD",
+          "attribute": "0x0B",
+          "glyph_annotation": "U+0644",
+          "unicode": "U+FEDD"
+        },
+        "medial": {
+          "slot": "0xCC",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEE0",
+          "unicode": "U+FEE0"
+        },
+        "final": {
+          "slot": "0xCD",
+          "attribute": "0x0B",
+          "glyph_annotation": "U+0644",
+          "unicode": "U+FEDE"
+        }
+      }
+    },
+    {
+      "index": 36,
+      "file_offset": "0x1C17",
+      "letter": "م",
+      "forms": {
+        "initial": {
+          "slot": "0xCE",
+          "attribute": "0x01",
+          "glyph_annotation": "U+FEE4",
+          "unicode": "U+FEE3"
+        },
+        "isolated": {
+          "slot": "0xCF",
+          "attribute": "0x02",
+          "glyph_annotation": "U+0645",
+          "unicode": "U+FEE1"
+        },
+        "medial": {
+          "slot": "0xCE",
+          "attribute": "0x01",
+          "glyph_annotation": "U+FEE4",
+          "unicode": "U+FEE4"
+        },
+        "final": {
+          "slot": "0xCF",
+          "attribute": "0x02",
+          "glyph_annotation": "U+0645",
+          "unicode": "U+FEE2"
+        }
+      }
+    },
+    {
+      "index": 37,
+      "file_offset": "0x1C1F",
+      "letter": "ن",
+      "forms": {
+        "initial": {
+          "slot": "0xD0",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEE8",
+          "unicode": "U+FEE7"
+        },
+        "isolated": {
+          "slot": "0xD1",
+          "attribute": "0x0B",
+          "glyph_annotation": "U+0646",
+          "unicode": "U+FEE5"
+        },
+        "medial": {
+          "slot": "0xD0",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEE8",
+          "unicode": "U+FEE8"
+        },
+        "final": {
+          "slot": "0xD1",
+          "attribute": "0x0B",
+          "glyph_annotation": "U+0646",
+          "unicode": "U+FEE6"
+        }
+      }
+    },
+    {
+      "index": 38,
+      "file_offset": "0x1C27",
+      "letter": "ه",
+      "forms": {
+        "initial": {
+          "slot": "0xD2",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEEC",
+          "unicode": "U+FEEB"
+        },
+        "isolated": {
+          "slot": "0xD3",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0647",
+          "unicode": "U+FEE9"
+        },
+        "medial": {
+          "slot": "0xD2",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FEEC",
+          "unicode": "U+FEEC"
+        },
+        "final": {
+          "slot": "0xD3",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0647",
+          "unicode": "U+FEEA"
+        }
+      }
+    },
+    {
+      "index": 39,
+      "file_offset": "0x1C2F",
+      "letter": "و",
+      "forms": {
+        "initial": {
+          "slot": "0xE9",
+          "attribute": "0x06",
+          "glyph_annotation": "U+0648",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xE9",
+          "attribute": "0x06",
+          "glyph_annotation": "U+0648",
+          "unicode": "U+FEED"
+        },
+        "medial": {
+          "slot": "0xE9",
+          "attribute": "0x06",
+          "glyph_annotation": "U+0648",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xE9",
+          "attribute": "0x06",
+          "glyph_annotation": "U+0648",
+          "unicode": "U+FEEE"
+        }
+      }
+    },
+    {
+      "index": 40,
+      "file_offset": "0x1C37",
+      "letter": "ى",
+      "forms": {
+        "initial": {
+          "slot": "0xEA",
+          "attribute": "0x04",
+          "glyph_annotation": "U+0649",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xEA",
+          "attribute": "0x04",
+          "glyph_annotation": "U+0649",
+          "unicode": "U+FEEF"
+        },
+        "medial": {
+          "slot": "0xEB",
+          "attribute": "0x05",
+          "glyph_annotation": "U+FEF0",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xEB",
+          "attribute": "0x05",
+          "glyph_annotation": "U+FEF0",
+          "unicode": "U+FEF0"
+        }
+      }
+    },
+    {
+      "index": 41,
+      "file_offset": "0x1C3F",
+      "letter": "ي",
+      "forms": {
+        "initial": {
+          "slot": "0xD4",
+          "attribute": "0x03",
+          "glyph_annotation": "U+FEF4",
+          "unicode": "U+FEF3"
+        },
+        "isolated": {
+          "slot": "0xD5",
+          "attribute": "0x0E",
+          "glyph_annotation": "U+064A",
+          "unicode": "U+FEF1"
+        },
+        "medial": {
+          "slot": "0xD4",
+          "attribute": "0x03",
+          "glyph_annotation": "U+FEF4",
+          "unicode": "U+FEF4"
+        },
+        "final": {
+          "slot": "0xD6",
+          "attribute": "0x0E",
+          "glyph_annotation": "U+FEF2",
+          "unicode": "U+FEF2"
+        }
+      }
+    },
+    {
+      "index": 42,
+      "file_offset": "0x1C47",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xF2",
+          "attribute": "0x80",
+          "glyph_annotation": "U+064B",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xF2",
+          "attribute": "0x80",
+          "glyph_annotation": "U+064B",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xF2",
+          "attribute": "0x80",
+          "glyph_annotation": "U+064B",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xF2",
+          "attribute": "0x80",
+          "glyph_annotation": "U+064B",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 43,
+      "file_offset": "0x1C4F",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xF3",
+          "attribute": "0x80",
+          "glyph_annotation": "U+064C",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xF3",
+          "attribute": "0x80",
+          "glyph_annotation": "U+064C",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xF3",
+          "attribute": "0x80",
+          "glyph_annotation": "U+064C",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xF3",
+          "attribute": "0x80",
+          "glyph_annotation": "U+064C",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 44,
+      "file_offset": "0x1C57",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xF4",
+          "attribute": "0x1E",
+          "glyph_annotation": "U+064D",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xF4",
+          "attribute": "0x1E",
+          "glyph_annotation": "U+064D",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xF4",
+          "attribute": "0x1E",
+          "glyph_annotation": "U+064D",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xF4",
+          "attribute": "0x1E",
+          "glyph_annotation": "U+064D",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 45,
+      "file_offset": "0x1C5F",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xF5",
+          "attribute": "0x80",
+          "glyph_annotation": "U+064E",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xF5",
+          "attribute": "0x80",
+          "glyph_annotation": "U+064E",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xF6",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FE77",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xF5",
+          "attribute": "0x80",
+          "glyph_annotation": "U+064E",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 46,
+      "file_offset": "0x1C67",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xF7",
+          "attribute": "0x80",
+          "glyph_annotation": "U+064F",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xF7",
+          "attribute": "0x80",
+          "glyph_annotation": "U+064F",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xF8",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FE79",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xF7",
+          "attribute": "0x80",
+          "glyph_annotation": "U+064F",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 47,
+      "file_offset": "0x1C6F",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xF9",
+          "attribute": "0x1F",
+          "glyph_annotation": "U+0650",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xF9",
+          "attribute": "0x1F",
+          "glyph_annotation": "U+0650",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xFA",
+          "attribute": "0x1F",
+          "glyph_annotation": "U+FE7B",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xF9",
+          "attribute": "0x1F",
+          "glyph_annotation": "U+0650",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 48,
+      "file_offset": "0x1C77",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xFB",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0651",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xFB",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0651",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xFC",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FE7D",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xFB",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0651",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 49,
+      "file_offset": "0x1C7F",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xFD",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0652",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xFD",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0652",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xFE",
+          "attribute": "0x80",
+          "glyph_annotation": "U+FE7F",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xFD",
+          "attribute": "0x80",
+          "glyph_annotation": "U+0652",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 50,
+      "file_offset": "0x1C87",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xEE",
+          "attribute": "0x0C",
+          "glyph_annotation": "U+FEF6",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xEE",
+          "attribute": "0x0C",
+          "glyph_annotation": "U+FEF6",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xEE",
+          "attribute": "0x0C",
+          "glyph_annotation": "U+FEF6",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xEE",
+          "attribute": "0x0C",
+          "glyph_annotation": "U+FEF6",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 51,
+      "file_offset": "0x1C8F",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xED",
+          "attribute": "0x0C",
+          "glyph_annotation": "U+FEF8",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xED",
+          "attribute": "0x0C",
+          "glyph_annotation": "U+FEF8",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xED",
+          "attribute": "0x0C",
+          "glyph_annotation": "U+FEF8",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xED",
+          "attribute": "0x0C",
+          "glyph_annotation": "U+FEF8",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 52,
+      "file_offset": "0x1C97",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xEF",
+          "attribute": "0x0F",
+          "glyph_annotation": "U+FEFA",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xEF",
+          "attribute": "0x0F",
+          "glyph_annotation": "U+FEFA",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xEF",
+          "attribute": "0x0F",
+          "glyph_annotation": "U+FEFA",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xEF",
+          "attribute": "0x0F",
+          "glyph_annotation": "U+FEFA",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 53,
+      "file_offset": "0x1C9F",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xEC",
+          "attribute": "0x0C",
+          "glyph_annotation": "U+FEFC",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xEC",
+          "attribute": "0x0C",
+          "glyph_annotation": "U+FEFC",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xEC",
+          "attribute": "0x0C",
+          "glyph_annotation": "U+FEFC",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xEC",
+          "attribute": "0x0C",
+          "glyph_annotation": "U+FEFC",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 54,
+      "file_offset": "0x1CA7",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        },
+        "final": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 55,
+      "file_offset": "0x1CAF",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        },
+        "final": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 56,
+      "file_offset": "0x1CB7",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        },
+        "final": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 57,
+      "file_offset": "0x1CBF",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        },
+        "final": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 58,
+      "file_offset": "0x1CC7",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xDB",
+          "attribute": "0x80",
+          "glyph_annotation": "U+007B",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xDB",
+          "attribute": "0x80",
+          "glyph_annotation": "U+007B",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xDB",
+          "attribute": "0x80",
+          "glyph_annotation": "U+007B",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xDB",
+          "attribute": "0x80",
+          "glyph_annotation": "U+007B",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 59,
+      "file_offset": "0x1CCF",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xDC",
+          "attribute": "0x80",
+          "glyph_annotation": "U+007C",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xDC",
+          "attribute": "0x80",
+          "glyph_annotation": "U+007C",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xDC",
+          "attribute": "0x80",
+          "glyph_annotation": "U+007C",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xDC",
+          "attribute": "0x80",
+          "glyph_annotation": "U+007C",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 60,
+      "file_offset": "0x1CD7",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xDD",
+          "attribute": "0x80",
+          "glyph_annotation": "U+007D",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xDD",
+          "attribute": "0x80",
+          "glyph_annotation": "U+007D",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xDD",
+          "attribute": "0x80",
+          "glyph_annotation": "U+007D",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xDD",
+          "attribute": "0x80",
+          "glyph_annotation": "U+007D",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 61,
+      "file_offset": "0x1CDF",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0xDE",
+          "attribute": "0x80",
+          "glyph_annotation": "U+007E",
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0xDE",
+          "attribute": "0x80",
+          "glyph_annotation": "U+007E",
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0xDE",
+          "attribute": "0x80",
+          "glyph_annotation": "U+007E",
+          "unicode": null
+        },
+        "final": {
+          "slot": "0xDE",
+          "attribute": "0x80",
+          "glyph_annotation": "U+007E",
+          "unicode": null
+        }
+      }
+    },
+    {
+      "index": 62,
+      "file_offset": "0x1CE7",
+      "letter": null,
+      "forms": {
+        "initial": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        },
+        "isolated": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        },
+        "medial": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        },
+        "final": {
+          "slot": "0x7F",
+          "attribute": "0x80",
+          "glyph_annotation": null,
+          "unicode": null
+        }
+      }
+    }
+  ],
+  "raw_table_sha256": "3c6a92cc2c4327f28cb4c9da853cacac8549cddbf1cdb04680c32aca0096abc7"
+}

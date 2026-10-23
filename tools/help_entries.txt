@@ -1,0 +1,37 @@
+# Owner decision 2026-10-13 — the refreshed مساعدة table's independent expectation.
+#
+# One logical entry per line: the row exactly as the table must carry it
+# (name - description), or the one justified-width hint.  Command names are
+# checked against the shell dispatcher and the mini's /usr/local/bin inventory.
+#
+# This file is the EXPECTATION: the case asserts the product emits each of
+# these entries as a complete shaped row.  It is deliberately NOT read from
+# tools/ar_type.c — a control that deletes a row from the table must be able
+# to fail, and an expectation derived from the suspect source could not.
+الأوامر:
+انتقل - غيّر دليل الجلسة؛ انتقل المنزل / انتقل لأعلى - إلى دليلك أو إلى الدليل الأعلى
+المسار - اعرض دليل الجلسة
+اعرض - قائمة ما في الدليل
+اطبع - اعرض محتوى ملف نصي
+أنشئ - أنشئ دليلاً
+انسخ - انسخ ملفاً أو دليلاً
+انقل / أعد التسمية - انقل بين الأدلة أو غيّر الاسم
+احذف - احذف ملفاً أو دليلاً فارغاً
+اعرض الأذونات / اضبط الأذونات - اعرض أذونات ملف أو دليل أو اضبطها
+ابحث - ابحث عن ملف باسمه أو نوعه
+فتّش - فتّش عن نص داخل الملفات
+حدّث الحزم - زامن المستودعات وحدّث الحزم المثبتة
+ثبّت حزمة - ثبّت حزمة أو أكثر
+أزل حزمة - أزل حزمة أو أكثر
+شغّل - شغّل برنامجاً واعرض حالة الخروج
+حرّر - افتح ملفًا نصيًا في المحرر
+متصفح - افتح متصفح الصفحات لملف أو خرج برنامج
+شكل - شكّل خرج برنامج عربي في الطرفية
+تاريخ - اعرض التاريخ الهجري
+مساعدة - هذه القائمة
+اخرج - أنه الجلسة
+البيئة / اضبط البيئة - اعرض متغيرات الجلسة أو اضبط متغيراً بقيمة حرفية
+تسويغ: AR_JUSTIFY_WIDTH=N يمد كلمة عربية منفردة إلى N خلايا بخلايا وصل
+حفظ: Ctrl+S
+الشرطة المائلة: Shift+م أو AltGr+ظ
+للمساعدة: مساعدة اسم الأمر

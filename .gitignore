@@ -1,0 +1,9 @@
+out/
+build/
+__pycache__/
+*.pyc
+*.o
+# staged by build.sh, never tracked
+tools/ar_type.c
+tools/ar_type_tables.h
+tools/ar_type_latin.h
