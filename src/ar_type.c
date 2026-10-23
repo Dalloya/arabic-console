@@ -1299,8 +1299,8 @@ static int editor_loop(void){ enum{NORMAL,ESC,CSI,SS3}state=NORMAL;unsigned char
  * The editor owns the logical line, shapes it with the existing engine       *
  * (build_cells), keeps its own in-memory history, and runs each committed    *
  * line through the installed شكل wrapper:                                    *
- *     execv(<AR_SHELL_WRAPPER>, {<wrapper>, <AR_SHELL_SHELL>, "-c", line})   *
- * with ARSH_SHELL=1 and stdin /dev/null.                                     *
+ *     execv(<AR_SHELL_WRAPPER>, {<wrapper>, <shell>, "-c", "\"$@\"", "bash", words...}) *
+ * with ARSH_SHELL=1; the console itself is the child's stdin.                *
  * ======================================================================== */
 
 #define SH_HIST_MAX 64
@@ -3391,32 +3391,6 @@ static int sh_resolve_stage_name(struct ShStage *sg) {
     return 0;
 }
 
-/* Only a resolved external command needs a rewritten shell line.  Quote each
- * parsed word so a marked path or pattern reaches the child byte for byte. */
-static int sh_stage_shell_line(const struct ShStage *sg, char *out, size_t cap) {
-    size_t n = 0;
-    int i;
-    for (i = 0; i < sg->argc; ++i) {
-        const unsigned char *p = (const unsigned char *)sg->argv[i];
-        if (n + 3 >= cap) return -1;
-        if (i) out[n++] = ' ';
-        out[n++] = '\'';
-        while (*p) {
-            if (*p == '\'') {
-                if (n + 4 >= cap) return -1;
-                memcpy(out + n, "'\\''", 4); n += 4;
-            } else {
-                if (n + 2 >= cap) return -1;
-                out[n++] = (char)*p;
-            }
-            ++p;
-        }
-        out[n++] = '\'';
-    }
-    out[n] = 0;
-    return 0;
-}
-
 /* One finished word: the pending redirection's target when one is waiting,
  * else the stage's next operand.  The word's bytes end where the NUL is
  * written and `inword` is cleared. */
@@ -4504,13 +4478,15 @@ static int sh_builtin(int argc, char **argv) {
  * through the same pipe-and-pump an ordinary composition stage and شغّل use -
  * the shell no longer hands it /dev/null and no longer throws typed bytes
  * away.  stdout/stderr are the real console tty, it leads its own process
- * group, and it execs the شكل wrapper: {wrapper, shell, "-c", line} with
+ * group, and it execs the شكل wrapper with the parsed words as a vector:
+ * {wrapper, shell, "-c", "$@", "bash", words...}, never a re-quoted line, with
  * ARSH_SHELL=1 exported.  Its exit status is reported on the same row شغّل
  * uses, so a program does not report one code through one route and another
  * through the other. */
 static void sh_run_command(void) {
-    char linebuf[MAX_COLS * 4 + 4], resolved_line[16384], cname[256];
-    const char *spawn_line = linebuf;
+    char linebuf[MAX_COLS * 4 + 4], argbuf[MAX_COLS * 4 + 4], cname[256];
+    char *child_argv[SH_ARGV_MAX + 6];
+    struct ShPipe pp;
     size_t n = 0, i;
     pid_t pid;
     int pfd[2], status = 0, feed = -1;
@@ -4540,9 +4516,7 @@ static void sh_run_command(void) {
      * quote, an unsupported composition operator, too many arguments) draws
      * its row and returns to the prompt: nothing is forked, nothing runs. */
     {
-        char argbuf[MAX_COLS * 4 + 4];
-        struct ShPipe pp;
-        int changed = 0, stage;
+        int stage;
         int rc = sh_parse(linebuf, argbuf, sizeof argbuf, &pp);
         if (rc < 0) {
             sh_arg_refuse(pp.stage[0].argc ? pp.stage[0].argv[0] : "", rc);
@@ -4551,8 +4525,7 @@ static void sh_run_command(void) {
             return;
         }
         for (stage = 0; stage < pp.nstage; ++stage) {
-            int one = sh_resolve_stage_name(&pp.stage[stage]);
-            if (stage == 0) changed = one;
+            (void)sh_resolve_stage_name(&pp.stage[stage]);
         }
     /* the command's own name, kept for a launch failure's row now
          * that the spawn happens outside this block. */
@@ -4589,13 +4562,16 @@ static void sh_run_command(void) {
         sh_return_to_live();
         return;
         }
-        if (changed) {
-            if (sh_stage_shell_line(&pp.stage[0], resolved_line, sizeof resolved_line)) {
-                sh_arg_refuse(pp.stage[0].argv[0], SH_SPLIT_COUNT);
-                sh_return_to_live();
-                return;
-            }
-            spawn_line = resolved_line;
+        {
+            int k, argc = 0;
+            child_argv[argc++] = sh_wrapper;
+            child_argv[argc++] = sh_shell;
+            child_argv[argc++] = (char *)"-c";
+            child_argv[argc++] = (char *)"\"$@\"";
+            child_argv[argc++] = (char *)"bash";
+            for (k = 0; k < pp.stage[0].argc; ++k)
+                child_argv[argc++] = (char *)pp.stage[0].argv[k];
+            child_argv[argc] = NULL;
         }
     }
     lines[0].len = 0; sh_caret = 0;              /* clear BEFORE the spawn */
@@ -4634,15 +4610,12 @@ static void sh_run_command(void) {
         return;
     }
     if (pid == 0) {
-        char *argv[5];
         close(pfd[1]);
         if (dup2(pfd[0], 0) < 0) _exit(127);
         if (pfd[0] != 0) close(pfd[0]);
         setpgid(0, 0);
         setenv("ARSH_SHELL", "1", 1);
-        argv[0] = sh_wrapper; argv[1] = sh_shell;
-        argv[2] = (char *)"-c"; argv[3] = (char *)spawn_line; argv[4] = NULL;
-        execv(sh_wrapper, argv);
+        execv(sh_wrapper, child_argv);
         sh_log("execv %s failed: %s", sh_wrapper, strerror(errno));
         _exit(127);
     }

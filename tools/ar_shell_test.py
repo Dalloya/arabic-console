@@ -223,8 +223,8 @@ def main():
     type_and_settle(s, line.encode("utf-8") + b"\r", quiet=0.7)
     s.kill()
     rec = record.read_text()
-    check("S1 child argv is exactly {wrapper, shell, -c, line}",
-          f"argv0={stub}\nargv1=/bin/bash\nargv2=-c\nargv3={line}\n" in rec,
+    check("S1 child argv is {wrapper, shell, -c, $@, bash, words}",
+          f"argv0={stub}\nargv1=/bin/bash\nargv2=-c\nargv3=\"$@\"\nargv4=bash\nargv5={line}\n" in rec,
           repr(rec))
     check("S1 ARSH_SHELL=1 in the child environment", "ARSH_SHELL=1\n" in rec)
     check("S1 the child stdin is /dev/null", "stdin=/dev/null\n" in rec)

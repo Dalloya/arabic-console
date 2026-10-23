@@ -88,6 +88,51 @@ None of them wraps `ls`, `cp`, `mv` or `rm`: they do the work themselves.
 expects them, and runs the suite. It prints one line per test and ends with
 `BUILD PASS` or `BUILD FAIL`.
 
+## Install on a machine
+
+`build.sh` leaves every program in `out/`. The command binaries install as-is in
+`/usr/local/bin` under their Arabic names — the same names the command table above uses —
+together with `شكل` (the shaper wrapper), `ar-shell` and `ar-type`:
+
+```
+cd out && sudo install -m 755 \
+  ar-type ar-shell شكل اعرض اطبع أنشئ انسخ انقل 'أعد التسمية' احذف \
+  فتّش ابحث 'اعرض الأذونات' 'اضبط الأذونات' 'حدّث الحزم' 'ثبّت حزمة' \
+  'أزل حزمة' تاريخ hisab /usr/local/bin/
+```
+
+`out/ar_type_safety_test` is also built; it is a test executable and is not installed.
+
+`شكل` is the one binary whose path matters to the session: `src/ar_type.c` looks it up as
+`AR_SHELL_WRAPPER=/usr/local/bin/شكل` and runs its commands through
+`AR_SHELL_SHELL=/bin/bash`. Both are overridable in the environment, but the defaults assume
+that path.
+
+The font goes wherever your distribution keeps console fonts: `/usr/share/kbd/consolefonts/`
+on Arch, `/usr/lib/kbd/consolefonts/` on Debian and Ubuntu. Confirm the directory on the
+target machine (`setfont -h`, or the distribution's own docs) rather than trusting a list,
+then `setfont console-16x32` loads the larger of the two for the current console.
+
+The keymap is generated, not shipped: `keymap/build_keymap.py` writes `out/arabic-console.map`,
+and `loadkeys out/arabic-console.map` applies it to the running console. To survive a reboot,
+set `KEYMAP=` and `FONT=` in `/etc/vconsole.conf` with the names you installed under. That is
+a system file — copy it aside before editing.
+
+The session runs on a real Linux virtual terminal (`ar-shell`, reached with a console switch
+such as Ctrl+Alt+F3). A terminal emulator inside X or Wayland is not a VT: it applies its own
+bidi and its own font, so what you see there is not what this project draws.
+
+On that VT: `اعرض /tmp` lists a directory, `تاريخ` prints the Hijri and Gregorian date line,
+`أنشئ /tmp/تجربة` creates a directory. Read the results as shaped cells on the console, which
+is the only place the shaping and the visual order are the project's and not someone else's.
+
+## Remove it again
+
+The reverse is the same set of names out of `/usr/local/bin`, the two `.psfu` files out of
+whichever console-font directory you used, `loadkeys` back to the stock map for that machine,
+and `/etc/vconsole.conf` restored from the copy you made. To confirm nothing is left behind,
+run `command -v` on any name from the command table: no output means the name is gone.
+
 ## Tests
 
 `build.sh` runs four things and prints one line each:
