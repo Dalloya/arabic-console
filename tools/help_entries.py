@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The مساعدة table's MEANING, as an independent predicate.
 
-The owner decided on 2026-10-13 to refresh the WO82 expectation to the
+The owner decided on 2026-10-13 to refresh the expectation to the
 console's current command surface and its justification hint.  The case must
 assert what the help table IS: every expected entry present
 as a COMPLETE entry (its name and its description, one row) in the shape the
@@ -12,20 +12,20 @@ fixture harness tools/t82_help_case_tests.sh, so the two can never drift.
 Reference model (independent of the product's current output):
   * the shaped letter stream comes from tools/shape.py + tools/join.py — the
     project's shaper, the same model the console's own case pins were measured
-    from (WO73/WO75);
+  from (the measured shaper model);
   * a word is a sequence of maximal ASCII (< 0x80) and Arabic runs, emitted
     last-to-first, an ASCII run keeping its own left-to-right order
-    (tools/ar_type.c:339-346, task 77 finding 3) — so "Ctrl+S" reads forward;
+  (tools/ar_type.c:339-346, the mixed-direction word rule) — so "Ctrl+S" reads forward;
   * a mark's CELL comes from the console's own table `dedicated_mark_cells`
     (tools/ar_type.c:158-163): terminal U+E000+i / connector U+E010+i for the
     marks U+064B..U+0652, U+0670, where connector marks follow initial/medial
     letters only (the rule tools/ar_type_test.py:122 measures against the real
     binary).  That mapping is draw_codepoint()'s paint-time job, not the
     shaper's, so it is re-derived here rather than imported from the product.
-    This models rendering; by the owner's 2026-10-14 decision the keyboard
+  This models rendering; by the 2026-10-14 decision the keyboard
     delivers Sakhr's eight marks on Shift, while U+0670 remains a font cell;
   * a typed shadda immediately BEFORE one of the six vowels is ONE stacked cell
-    carried by the shadda (tools/ar_type.c:164-173, task 54); no help entry
+  carried by the shadda (tools/ar_type.c:164-173, the stacked-cell rule); no help entry
     uses one today, and the predicate still reproduces the rule so a future
     entry cannot silently pass a two-cell row where the console draws one.
 
@@ -57,7 +57,7 @@ DRAW_MARKS = {cp: term for cp, term, _ in _MARK_CELLS}
 CONNECTOR_MARKS = {cp: conn for cp, _, conn in _MARK_CELLS}
 ALL_MARK_CELLS = set(DRAW_MARKS) | set(CONNECTOR_MARKS)
 PRIVATE_MARK_CELLS = set(DRAW_MARKS.values()) | set(CONNECTOR_MARKS.values())
-# WO53/WO54: a typed shadda immediately BEFORE a vowel coalesces into one cell
+# a typed shadda immediately BEFORE a vowel coalesces into one cell
 # (tools/ar_type.c:164-173 shadda_combo_vowel/shadda_combo_codepoint).  No help
 # entry uses one today; the predicate reproduces the rule so a future entry
 # cannot silently pass a two-cell row.
@@ -142,7 +142,7 @@ def _word_cells(word):
     for li in list(cps):
         if cps[li] in DRAW_MARKS:
             cps[li] = _mark_cell(cps[li], joined, li)
-    # Task 54: the vowel's cell belongs to the shadda immediately before it.
+  # the vowel's cell belongs to the shadda immediately before it.
     for li in range(1, n):
         if raw[li] in _COMBO_VOWELS and raw[li - 1] == _SHADDA:
             del cps[li]

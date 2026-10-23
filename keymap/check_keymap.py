@@ -120,7 +120,7 @@ def binding_lines(text: str) -> tuple[dict[tuple[tuple[str, ...], int], list[int
 def duplicate_scan(text: str) -> None:
     """Fail on any (modifier, keycode) level assigned by more than one line.
 
-    This is the durable fix for work order 50's bug: kbd applies map entries
+    This is the durable fix for the earlier bug: kbd applies map entries
     in file order, so a second line for the same level silently overwrites the
     first (that is how `shift keycode 49 = U+0670` ate the alef-madda).
     Single-level lines are checked against each other, and the columns of the
@@ -153,7 +153,7 @@ def main() -> None:
     strings = function_strings(text)
     names, codes = keysyms(), keycodes()
 
-    # Work order 50: run the duplicate scan before everything else so a
+    # The duplicate scan runs before everything else so a
     # silently-overwritten level is reported first, with its line numbers.
     duplicate_scan(text)
 
@@ -232,7 +232,7 @@ def main() -> None:
         if codepoint in text:
             fail(f"bidi control {codepoint} found")
 
-    # Work order 36: the Super keys must be Meta, not Alt, so the console
+    # The Super keys must be Meta, not Alt, so the console
     # ESC-prefixes them (Super+Space becomes an ESC chord for mode toggling).
     super_meta: dict[int, str] = {}
     for line in text.splitlines():
@@ -242,7 +242,7 @@ def main() -> None:
     if super_meta.get(125) != "Meta_L" or super_meta.get(126) != "Meta_R":
         fail(f"Super keys are not Meta_L/Meta_R: {super_meta}")
 
-    # Work order 49 removed the precomposed ligature levels.  R1-D1 keeps
+    # The precomposed ligature levels are removed. The map keeps
     # the two physical b levels as editor-private sentinels: Arabic mode drops
     # them, while Latin mode turns them into b/B.
     ligature_levels = (("AD05", "shift"), ("AC05", "shift"),
@@ -276,7 +276,7 @@ def main() -> None:
         if len(columns) < 10 or columns[4] != ctrl or columns[6] != meta:
             fail(f"keycode {code} control/meta columns damaged: {base_line}")
 
-    # Work order 50: shift keycode 49 carries the alef-madda U+0622 alone -
+  # Shift keycode 49 carries the alef-madda U+0622 alone -
     # the duplicate scan above guarantees no second line binds that level -
     # The base SysRq row remains VoidSymbol on both levels, with no override.
     if entries.get(("shift", 49)) != "U+0622":

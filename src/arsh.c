@@ -1,5 +1,5 @@
 /* tools/arsh.c — run an unmodified program on a pseudo-terminal and shape its
- * Arabic output for the kernel console (work order 56, option C of
+ * Arabic output for the kernel console (option C of
  * LAYER1-BRIEF.md).
  *
  * The kernel console paints one codepoint per cell, strictly left to right,
@@ -42,7 +42,7 @@
  *    terminal/connector choice made by the same "does the preceding letter
  *    join forward" rule ar_type.c's mark_after_forward_join uses; a shadda
  *    immediately followed by a vowel collapses into the one stacked cell
- *    (task 54), exactly as the shaper draws it.
+ * the stacked-cell rule, exactly as the shaper draws it.
  *  - Column layout: a shaped letter is one cell, the same as before, so
  *    Arabic columns keep their width — except a lam-alef ligature, which
  *    collapses two letters into ONE cell, and marks, which each ADD one
@@ -180,7 +180,7 @@ static size_t shape_word(const unsigned int *w, size_t n, unsigned int *out) {
         int jp, jn;
         if (cp == 0x0640) { out[m++] = cp; continue; } /* tatweel: a cell, no form */
         if (transparent_cp(cp)) {
-            /* Task 54: a vowel whose cell belongs to the shadda right before
+      /* a vowel whose cell belongs to the shadda right before
              * it has no cell of its own; the shadda emitted the pair. */
             if (shadda_combo_vowel(cp) && i > 0 && w[i - 1] == 0x0651) continue;
             if (cp == 0x0651 && i + 1 < n && shadda_combo_vowel(w[i + 1])) {
@@ -198,7 +198,7 @@ static size_t shape_word(const unsigned int *w, size_t n, unsigned int *out) {
         if (j > 0) prev = w[j - 1];
         for (j = i + 1; j < n && transparent_cp(w[j]); ++j) {}
         if (j < n) nxt = w[j];
-        /* Task 45: this alef belongs to the lam before it; the lam's cell
+    /* this alef belongs to the lam before it; the lam's cell
          * carries the pair, so the alef emits nothing. */
         if (lam_alef_variant(cp, NULL, NULL) && prev == 0x0644) continue;
         if (cp == 0x0644 && lam_alef_variant(nxt, &isol, &fina)) {
@@ -236,7 +236,7 @@ static int flush_out(void) {
     return 0;
 }
 
-/* ---- work order 78 (owner note 3): the row hold buffer --------------------
+/* ---- the row hold buffer --------------------
  * A row the console draws itself is anchored at the RIGHT margin, so the
  * row's WIDTH must be known before its first cell is written.  The shaped
  * line is therefore emitted into this hold buffer first, measured in columns,
@@ -288,7 +288,7 @@ static int out_utf8(unsigned int cp) {
     return out_bytes(b, n);
 }
 
-/* ---- work order 78 (owner note 3): the row anchor -------------------------
+/* ---- the row anchor -------------------------
  * A row the console draws is anchored at the RIGHT margin, the way the banner
  * and the live line are.  The anchor is THIS ONE SWITCH: the number of blank
  * cells written before the row's first cell.  `return 0;` restores the old
@@ -418,7 +418,7 @@ static int class_of(unsigned int cp) {
 
 static int is_forms(unsigned int cp) { return cp >= 0xFE70 && cp <= 0xFEFC; }
 
-/* ---- work order 66: Route B — the wrapper's own closed table ------------ */
+/* ---- Route B — the wrapper's own closed table ------------ */
 /* This is the FLOOR of the message layer (D2 Route B).  Arabic-first routes
  * A1 (the locale + the packages' own catalogues) and A3 (a bash catalogue we
  * author) answer the same messages upstream; this table covers what reaches
@@ -564,7 +564,7 @@ static size_t nunits;
  * top check cuts the whole token there.  Stopping at an interior slash — the
  * pre-89 behaviour — left the token's prefix behind as its own unit, and the
  * RTL unit reversal then painted it after the island: the تاريخ row's
- * `03/10/2026م` reached the screen as `/10/2026` م `03` (WO87/89, reproduced
+ * `03/10/2026م` reached the screen as `/10/2026` م `03` (reproduced
  * with the tool's own line; minimal repro `المسار: 03/مشاريع`). */
 static int bare_path_token(const unsigned int *cp, size_t i, size_t m) {
     size_t e = i, k;
@@ -623,7 +623,7 @@ static size_t cut_units(const unsigned int *cp, size_t m) {
             units[u].kind = 1; units[u].start = s; units[u].end = i; ++u;
         } else {
             /* Non-Arabic: S = the maximal stretch with no Arabic codepoint,
-             * stopped at a bare-path token's own edge (WO89: the slash inside
+       * stopped at a bare-path token's own edge (the slash inside
              * such a token is never a unit boundary). */
             size_t s = i;
             while (i < m && class_of(cp[i]) != 2 &&
@@ -732,7 +732,7 @@ static int process_line(const unsigned char *p, size_t n) {
 
     /* D1: cut into units, decide the base direction, emit — reversing the
      * unit sequence only when the base is RTL.
-     * WO78 D2: this is a row the console draws, so on the console it is
+   * this is a row the console draws, so on the console it is
      * anchored at the RIGHT margin.  Emit it into the hold buffer first (the
      * pad has to be written before its first cell, so its width must be known
      * first), then write pad + row in one go. */
@@ -784,7 +784,7 @@ static void on_winch(int sig) { (void)sig; got_winch = 1; }
 static void on_term(int sig) {
     (void)sig;
     got_term = 1;
-    /* N4d: the child is a session leader, so its pid IS its process group -
+  /* the child is a session leader, so its pid IS its process group -
      * term the GROUP, not the one process, or a descendant mid-pipeline
      * survives its parent's death.  A session leader always leads a group,
      * so the fallback is only for the impossible case. */
@@ -793,7 +793,7 @@ static void on_term(int sig) {
     }
 }
 
-/* WO84 (S8): the caller (ar-shell) cannot signal the program directly — it
+/* the caller (ar-shell) cannot signal the program directly — it
  * lives in this wrapper's separate session behind a pty — so the console's
  * ^C arrives here as SIGINT.  Hand it to the child the way a terminal
  * would: write 0x03 into the pty master; the child pty's line discipline
@@ -801,7 +801,7 @@ static void on_term(int sig) {
  * handler is async-signal-safe (write only, on a plain int set before the
  * loop reads anything).
  *
- * N4d: and ALSO signal the child's own group directly, because the pty route
+ * and ALSO signal the child's own group directly, because the pty route
  * only reaches the FOREGROUND group - a descendant that moved itself into
  * another group of that session would survive the terminal's ^C, which is not
  * what a console user means by interrupting.  kill() is async-signal-safe. */
@@ -834,7 +834,7 @@ static void usage(void) {
                     "ARSH_MESSAGES=off disables the wrapper's own message table (Route B).\n"
                     "ARSH_OUT_FD=n sends the shaped output to fd n (the console) while the\n"
                     "child keeps its own stdout; ARSH_STDIN=own / ARSH_STDERR=own leave the\n"
-                    "child's stdin / stderr exactly as the caller set them (work order 99:\n"
+                    "child's stdin / stderr exactly as the caller set them\n"
                     "the shell's executor hosts one stream of a composed stage).\n");
 }
 
@@ -914,7 +914,7 @@ int main(int argc, char **argv) {
         const char *e = getenv("ARSH_MESSAGES");
         if (e && !strcmp(e, "off")) ar_messages_on = 0;
     }
-    /* WO99 N4b: descriptor ownership for a HOSTED stage - one whose stdout or
+  /* descriptor ownership for a HOSTED stage - one whose stdout or
      * stderr is terminal-bound while the shell's executor owns the others.
      * The defaults below are this wrapper's shipped behaviour exactly; each
      * switch only takes away the descriptor it names, so a caller that sets
@@ -936,14 +936,14 @@ int main(int argc, char **argv) {
     }
     if (isatty(out_fd)) {
         struct termios t;
-        /* Task 77 (finding 6): the tty below re-adds the CR only when it
+    /* the tty below re-adds the CR only when it
          * PROCESSES output, so the CR may be dropped only with OPOST as well
          * as ONLCR; with OPOST off a bare LF would leave the next row at the
          * current column (measured: OPOST-on gave CRLF, OPOST-off bare LF). */
         if (!tcgetattr(out_fd, &t)) out_onlcr = (t.c_oflag & OPOST) && (t.c_oflag & ONLCR);
     }
     apply_winsize(master);
-    master_for_signal = master;   /* WO84: ^C handoff target (see on_int) */
+  master_for_signal = master;  /* ^C handoff target (see on_int) */
     if (!ar_stdin_own && isatty(0) && !tcgetattr(0, &saved_stdin)) {
         stdin_was_tty = 1;
         raw = saved_stdin;
@@ -953,7 +953,7 @@ int main(int argc, char **argv) {
         raw.c_cc[VTIME] = 0;
         tcsetattr(0, TCSANOW, &raw);
     }
-    /* N4d: the wrapper is a presentation layer, not a stage.  When its shaped
+  /* the wrapper is a presentation layer, not a stage. When its shaped
      * reader disappears (the console feed closes, a redirection target fills
      * and goes away) the write fails and the error is handled as an error -
      * the wrapper must not die of SIGPIPE with the CHILD's status still
@@ -981,7 +981,7 @@ int main(int argc, char **argv) {
         signal(SIGWINCH, SIG_DFL); signal(SIGPIPE, SIG_DFL);
         setsid();
         ioctl(slave, TIOCSCTTY, 0);
-        /* WO99 N4b: a descriptor the caller owns stays the caller's.  The pty
+    /* a descriptor the caller owns stays the caller's. The pty
          * keeps being the child's controlling terminal either way; only the
          * named stream is left as the executor set it. */
         if (!ar_stdin_own) dup2(slave, 0);

@@ -19,7 +19,7 @@ def shape_with_records(text):
             if pos in ("unknown", "transparent"):
                 out.append((ord(name), None))
             elif name in LAM_ALEF_FORMS:
-                # Task 45: the lam-alef ligature has its own glyphs; they are
+        # the lam-alef ligature has its own glyphs; they are
                 # not per-letter presentation forms of either member.
                 out.append((LAM_ALEF_FORMS[name][pos], None))
             else:

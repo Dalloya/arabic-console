@@ -2,7 +2,7 @@
 #define _GNU_SOURCE
 #define _DEFAULT_SOURCE
 #define _POSIX_C_SOURCE 200809L
-#include <dirent.h>     /* WO85: filesystem completion (readdir) */
+#include <dirent.h>   /* filesystem completion (readdir) */
 #include <errno.h>
 #include <fcntl.h>
 #include <signal.h>
@@ -21,7 +21,7 @@
 #include <sys/un.h>
 #include <sys/wait.h>
 #ifdef AR_TYPE_SHELL
-#include <sys/stat.h>   /* WO79 D1: struct stat for the home-inode compare */
+#include <sys/stat.h>  /* struct stat for the home-inode compare */
 #endif
 #include <linux/input.h>
 #include <linux/kd.h>
@@ -42,7 +42,7 @@ static void load_justify_width(void) {
  justify_width=(size_t)n;
 }
 static size_t anchor_line, anchor_col;
-/* Task 36/51: 0 = Arabic typing (the default), 1 = Latin typing.  Toggled by
+/* Typing mode: 0 = Arabic (the default), 1 = Latin. Toggled by
  * the ESC + space chord - Super+Space, which the keymap delivers ESC-prefixed
  * only while the kernel's Meta-bit is on - and by the single byte 0x00
  * (Ctrl+Space), the chord the console actually delivers: kbd 2.6.4's
@@ -154,7 +154,7 @@ static void configure_pointer_drawing(void) {
  pointer_draw_enabled=!(value&&strcmp(value,"0")==0);
 }
 static int pointer_marker_visible(void) { return pointer_draw_enabled&&pointer_visible; }
-/* Task 60: the console row the typing frame starts at, learned at startup
+/* the console row the typing frame starts at, learned at startup
  * with a cursor-position report (ESC[6n -> ESC[r;cR, answered by the real
  * console).  The profile prints the banner before launching the editor and
  * leaves the cursor several rows down: the typing frame's row 0 belongs
@@ -166,7 +166,7 @@ static int pointer_marker_visible(void) { return pointer_draw_enabled&&pointer_v
  * out. */
 static long screen_origin, console_row;
 static int cpr_pending; static long cpr_sent_ms; static int startup_arrow_done;
-/* Task 60: the rows ABOVE the typing frame are the profile's banner, which
+/* the rows ABOVE the typing frame are the profile's banner, which
  * the editor does not own.  Snapshot them at startup (read from /dev/vcsu
  * once the CPR reply has located the frame) and redraw them from the
  * snapshot, so the arrow can visit the banner rows without erasing the
@@ -174,10 +174,10 @@ static int cpr_pending; static long cpr_sent_ms; static int startup_arrow_done;
  * exactly as before. */
 static unsigned int banner_cells[32][MAX_COLS];
 static size_t banner_len[32], banner_count;
-/* The legacy aggregate is the only poison (task 46).  /dev/input/mice is the
+/* The legacy aggregate is the only source of duplicate motion. /dev/input/mice is the
  * aggregate of the very evdev nodes opened above, so once any evdev node has
  * delivered a single event, the aggregate's motion is dropped - reading it
- * would move the same physical mouse a second time (that was the task-44
+ * would move the same physical mouse a second time (that caused the earlier
  * drift, and it must stay dropped).  Its packets are still read and its
  * buttons still register.  Both event types are accepted from the evdev
  * nodes themselves: an absolute event SETS the position (and so re-anchors
@@ -191,7 +191,7 @@ static size_t banner_len[32], banner_count;
  * the current cell, and a button from an ignored movement source never moves
  * the pointer by itself. */
 static int pointer_evdev_delivered;
-/* Task 52, test-only: sweep8 emits one @AR-TYPE52P record per coalesced paint
+/* Test-only: sweep8 emits one @AR-TYPE52P record per coalesced paint
  * (test_paint_marker), numbered by the count of accepted movement events
  * (test_event_count) so the harness can align paint with model per event. */
 static int test_paint_marker; static long test_event_count;
@@ -209,7 +209,7 @@ static void restore_terminal(void) { if (have_termios) tcsetattr(tty_fd, TCSANOW
 static void on_signal(int sig) { input_socket_stop(); restore_terminal(); signal(sig, SIG_DFL); raise(sig); }
 static const struct ArabicLetter *letter(unsigned int cp) { size_t i; for (i=0;i<ARABIC_LETTER_COUNT;++i) if (arabic_letters[i].base==cp) return &arabic_letters[i]; return NULL; }
 static int transparent(unsigned int cp) { size_t i; for (i=0;i<TRANSPARENT_CODEPOINT_COUNT;++i) if (transparent_codepoints[i]==cp) return 1; return 0; }
-/* Task 36: Latin-mode translation.  A codepoint the Arabic layer delivered
+/* Latin-mode translation. A codepoint the Arabic layer delivered
  * maps to the US character of the same physical key and level - a plain
  * letter to the US lowercase, the Shift level (a mark) to the US capital,
  * Arabic-Indic digits to ASCII.  The table is generated from the keymap's
@@ -217,14 +217,14 @@ static int transparent(unsigned int cp) { size_t i; for (i=0;i<TRANSPARENT_CODEP
  * drift.  The buffer stores the translated codepoint; the mode only changes
  * what a keystroke becomes. */
 static int translate_latin(unsigned int *cp) { size_t i; for (i=0;i<ARABIC_LATIN_PAIR_COUNT;++i) if (arabic_latin_pairs[i].arabic==*cp) { *cp=arabic_latin_pairs[i].latin; return 1; } return 0; }
-/* Work order R1-D1: the freed physical b levels use private sentinels so
+/* The freed physical b levels use private sentinels so
  * Latin mode can recover b/B while Arabic mode still consumes nothing. */
 static int translate_freed_b(unsigned int *cp) {
  if (*cp == 0xE100) { if (latin_mode) *cp = 'b'; else return 0; return 1; }
  if (*cp == 0xE101) { if (latin_mode) *cp = 'B'; else return 0; return 1; }
  return -1;
 }
-/* Task 45: the lam-alef ligature.  cp is an ALEF variant of the pair; the
+/* The lam-alef ligature. cp is an ALEF variant of the pair; the
  * isolated and final glyphs are returned (the alef never joins forward, so
  * there is no medial and no lam form beside it). */
 static int lam_alef_variant(unsigned int cp,unsigned int *isol,unsigned int *fina) { size_t i;for(i=0;i<LAM_ALEF_COUNT;++i)if(lam_alef_table[i].alef==cp){if(isol)*isol=lam_alef_table[i].isol;if(fina)*fina=lam_alef_table[i].fina;return 1;}return 0; }
@@ -236,7 +236,7 @@ static const struct DrawCodepoint dedicated_mark_cells[] = {
  {0x0651,0xE006,0xE016},{0x0652,0xE007,0xE017},{0x0670,0xE008,0xE018},
 };
 static unsigned int draw_codepoint(unsigned int cp,int connector) { size_t i; for(i=0;i<sizeof(dedicated_mark_cells)/sizeof(dedicated_mark_cells[0]);++i) if(dedicated_mark_cells[i].logical==cp)return connector?dedicated_mark_cells[i].connector:dedicated_mark_cells[i].terminal; return cp; }
-/* Task 54: the six shadda+vowel stacks.  A shadda (U+0651) IMMEDIATELY
+/* the six shadda+vowel stacks. A shadda (U+0651) IMMEDIATELY
  * followed by one of the six vowels below collapses with it into ONE cell:
  * U+E030-U+E035, or the connector variants U+E038-U+E03D when the letter the
  * marks belong to (the one before the shadda) joins forward - the same rule
@@ -265,8 +265,8 @@ static void read_framebuffer_size(void) { FILE *f=fopen("/sys/class/graphics/fb0
  * exists.  On a VT this reads the loaded charmap; where the query is not
  * available (a pty, say) the arrow is assumed present so the console path is
  * unaffected. */
-static long now_ms(void); /* task 64: forward decl - the paint trace stamps lines */
-/* Task 64 diagnostic: one timestamped line per pointer-paint bookkeeping step,
+static long now_ms(void); /* forward decl - the paint trace stamps lines */
+/* diagnostic: one timestamped line per pointer-paint bookkeeping step,
  * appended to the same /tmp/ar-type-pointer.log the calibration log uses, so a
  * console-only trail can be reconstructed from the log alone.  Gated by
  * AR_TYPE_POINTER_DEBUG exactly like the calibration lines; never written to
@@ -417,13 +417,13 @@ static struct Cell pointer_map_delta(const struct PointerDevice *d,long dx,long 
  m.absolute=0;m.raw_x=dx;m.raw_y=dy;m.min_x=d->min_x;m.max_x=d->max_x;m.min_y=d->min_y;m.max_y=d->max_y;
  m.fb_w=framebuffer_w;m.fb_h=framebuffer_h;m.cols=(long)terminal_cols;m.rows=(long)terminal_rows;m.previous=pointer_cell;return map_pointer(&m);
 }
-/* Task 60: every cursor row movement is booked against the TRUE console
+/* every cursor row movement is booked against the TRUE console
  * row.  The console clamps cursor moves at the screen edges, so the row the
  * editor believed could drift from the row the console actually holds
  * (measured: a 9-row startup offset, then a permanent 4-row one after the
  * first clamped paint); clamping here exactly the way the console does
  * keeps console_row real. */
-/* Task 64: a console scroll (an LF at the bottom row) shifts every row on
+/* a console scroll (an LF at the bottom row) shifts every row on
  * screen up by one - the painted arrow included.  The erase target
  * (painted_cell) must follow the scroll, or the next pointer repaint erases
  * the row the arrow was AT, not the row it is ON: the one-row trail measured
@@ -459,7 +459,7 @@ static int delete_cp(void) { struct Line *l;size_t move;if(!cursor_valid())retur
 static int mark_after_forward_join(const struct Line *l,size_t start,size_t end,size_t index) { size_t prior=index;const struct ArabicLetter *cur,*next;unsigned int nxt;
  while(prior>start){--prior;if(!transparent(l->cp[prior]))break;}
  if(prior==index||!letter(l->cp[prior]))return 0;cur=letter(l->cp[prior]);nxt=next_joining_cp(l,end,prior);
- /* Task 45: a lam that ligates with its following alef never joins forward,
+ /* a lam that ligates with its following alef never joins forward,
   * so a mark between the two takes the plain cell, not the connector. */
  if(l->cp[prior]==0x0644&&lam_alef_variant(nxt,NULL,NULL))return 0;
  next=letter(nxt);
@@ -511,7 +511,7 @@ static size_t build_cells(size_t row, unsigned int *out, unsigned char *inverse,
  }
  end=l->len;while(end){size_t word_first=cells;int pure_arabic=1;start=end;while(start&&l->cp[start-1]!=0x20)--start;
  for(i=start;i<end;++i)if(l->cp[i]<0x80){pure_arabic=0;break;}
- /* Task 77 (finding 3): a word is a sequence of maximal ASCII and Arabic
+ /* a word is a sequence of maximal ASCII and Arabic
   * runs.  Emit the runs last-to-first like the words around them, but keep
   * an ASCII run's own left-to-right order: Latin islands (paths, quotes,
   * %s\n) must read forward.  Joining context stays the whole word
@@ -520,17 +520,17 @@ static size_t build_cells(size_t row, unsigned int *out, unsigned char *inverse,
   while(run_start>start&&(l->cp[run_start-1]<0x80)==ascii)--run_start;
   if(ascii){for(i=run_start;i<run_end;++i){if(row==cursor_line&&i==cursor_col)cur_visual=cells;out[cells]=l->cp[i];connector[cells]=0;visual_origin[cells]=i;inverse[cells++]=selected(row,i);}continue;}
   for(i=run_end;i-->run_start;){const struct ArabicLetter *cur=letter(l->cp[i]);unsigned int shown=l->cp[i],covered=i;int combo=0;
-  /* Task 54: a vowel whose cell belongs to the shadda immediately before it
+ /* a vowel whose cell belongs to the shadda immediately before it
    * has no cell of its own; the shadda emits the pair below. */
   if(shadda_combo_vowel(l->cp[i])&&i>start&&l->cp[i-1]==0x0651)continue;
   if(cur){unsigned int prev=previous_joining_cp(l,start,i),next=next_joining_cp(l,end,i),isol=0,fina=0;
-   /* Task 45: this alef belongs to a lam-alef ligature; the lam's own cell
+  /* this alef belongs to a lam-alef ligature; the lam's own cell
     * already carries the pair, so no cell is emitted for the alef. */
    if(lam_alef_variant(l->cp[i],NULL,NULL)&&prev==0x0644)continue;
    if(l->cp[i]==0x0644&&lam_alef_variant(next,&isol,&fina)){int jp=prev&&(joining_type(prev)=='D'||joining_type(prev)=='C');shown=jp?fina:isol;covered=next_joining_index(l,end,i);}
    else{const struct ArabicLetter *following=letter(next);int jp=cur->form[FINA].unicode&&prev&&(joining_type(prev)=='D'||joining_type(prev)=='C'),jn=cur->form[INIT].unicode&&((following&&following->form[FINA].unicode)||joining_type(next)=='C'),p=jp?(jn?MEDI:FINA):(jn?INIT:ISOL);if(cur->form[p].unicode)shown=cur->form[p].unicode;}
   }
-  /* Task 54: a shadda immediately followed by one of the six vowels draws
+ /* a shadda immediately followed by one of the six vowels draws
    * the single stacked cell covering both marks - the connector variant
    * exactly when the standalone marks would take one. */
   if(l->cp[i]==0x0651&&i+1<end&&shadda_combo_vowel(l->cp[i+1])){shown=shadda_combo_codepoint(l->cp[i+1],mark_after_forward_join(l,start,end,i));covered=i+1;combo=1;}
@@ -575,7 +575,7 @@ static long cursor_physical_row(size_t total) { size_t logical,physical=0,visual
 /* Put the terminal cursor back on the insertion cursor's cell: row, then the
  * RTL column.  Shared by the full redraw and the two-row pointer repaint. */
 static int place_cursor(long from_row,long to_row) { unsigned int cells[MAX_COLS];unsigned char inverse[MAX_COLS],connector[MAX_COLS];size_t visual=0,local,target;char seq[32];
- (void)from_row; /* task 60: the move is computed from the true console row */
+ (void)from_row; /* the move is computed from the true console row */
  ptr_trace("place_cursor from=%ld to=%ld origin=%ld console_row=%ld",from_row,to_row,screen_origin,console_row);
  if(move_rows(screen_origin+(long)to_row-console_row))return-1;
  if(cursor_line>=line_count){if(bytes("\r"))return-1;return 0;}
@@ -586,16 +586,16 @@ static int place_cursor(long from_row,long to_row) { unsigned int cells[MAX_COLS
  if(target){snprintf(seq,sizeof(seq),"\033[%zuC",target);if(bytes(seq))return-1;}
  return 0;
 }
-/* Task 52: the painter takes the pointer's cell as a parameter - the single
+/* the painter takes the pointer's cell as a parameter - the single
  * authoritative cell, never a second copy - so a paint can only ever draw
  * the cell the model computed. */
-/* Task 60: the arrow overlay is keyed to console_row - the row this draw
+/* the arrow overlay is keyed to console_row - the row this draw
  * ACTUALLY lands at (the cursor has not moved since the caller moved it).
  * Keying it to a computed row breaks the moment a scroll adjusts the frame
  * (measured: a one-row trail after the frame scrolls). */
 static int draw_row(size_t logical,size_t chunk,unsigned int *cells,unsigned char *inverse,unsigned char *connector,size_t count,struct Cell ptrcell) { size_t from=chunk*terminal_cols,to=from+terminal_cols<count?from+terminal_cols:count,i,n=to-from,pad=terminal_cols-n;
  if(bytes("\r\033[K"))return-1;for(i=0;i<pad;++i){int p=pointer_marker_visible()&&ptrcell.y==console_row&&ptrcell.x==(long)i;if(p){painted_cell=ptrcell;painted_cell.y=console_row;}if(p&&bytes("\033[7m"))return-1;if(putcp(p&&pointer_arrow_glyph?pointer_arrow_glyph:0x20))return-1;if(p&&bytes("\033[27m"))return-1;}for(i=from;i<to;++i){int p=pointer_marker_visible()&&ptrcell.y==console_row&&ptrcell.x==(long)(pad+i-from);unsigned int shown=p&&pointer_arrow_glyph?pointer_arrow_glyph:draw_codepoint(cells[i],connector[i]);if(p){painted_cell=ptrcell;painted_cell.y=console_row;}if((inverse[i]||p)&&bytes("\033[7m"))return-1;if(putcp(shown))return-1;if((inverse[i]||p)&&bytes("\033[27m"))return-1;}return bytes("\033[0m"); }
-/* Work order 66, owner ruling (Sep 27 2026): the mode indicator is DROPPED
+/* Owner ruling (Sep 27 2026): the mode indicator is DROPPED
  * entirely ("drop it looks ugly").  This function is kept as a no-op so the
  * two call sites (full redraw, pointer repaint) and the cursor geometry
  * around them stay untouched; it no longer paints a corner glyph.  The
@@ -611,12 +611,12 @@ static int row_for_physical(long physical,size_t *logical,size_t *chunk) { size_
  for(r=0;r<line_count;++r){size_t rows=line_rows(r);if(physical<(long)(start+rows)){*logical=r;*chunk=(size_t)(physical-(long)start);return 1;}start+=rows;}
  return 0;
 }
-/* Task 60: draw_physical_row takes a CONSOLE row; the typing frame lives at
+/* draw_physical_row takes a CONSOLE row; the typing frame lives at
  * console row screen_origin, so the frame's own row is crow - screen_origin
  * (negative: a row above the frame - the profile's banner). */
 static int draw_physical_row(long crow,struct Cell ptrcell) { unsigned int cells[MAX_COLS];unsigned char inverse[MAX_COLS],connector[MAX_COLS];size_t logical,chunk,count,unused=0;long frow=crow-screen_origin;
  if(frow>=0&&row_for_physical((size_t)frow,&logical,&chunk)){count=build_cells(logical,cells,inverse,connector,&unused);return draw_row(logical,chunk,cells,inverse,connector,count,ptrcell);}
- /* Task 60: a row above the typing frame is the profile's banner; redraw it
+ /* a row above the typing frame is the profile's banner; redraw it
   * from the startup snapshot instead of as an empty row.  The snapshot row
   * is padded to the full width so draw_row's RTL anchoring pad (meant for
   * typing rows) is zero and the hint lands on its original columns. */
@@ -646,7 +646,7 @@ static int repaint_pointer(struct Cell oldc,struct Cell newc) { long a=oldc.y,b=
  if(place_cursor(b,cp))return-1;
  ptr_trace("repaint_pointer flush console_row=%ld",console_row);
  if(flush_out())return -1;
- /* Task 64: painted_cell was recorded by draw_row at the moment the arrow
+ /* painted_cell was recorded by draw_row at the moment the arrow
   * was painted (keyed to console_row); nothing to assign here. */
  return 0;
 }
@@ -654,10 +654,10 @@ static int repaint_pointer(struct Cell oldc,struct Cell newc) { long a=oldc.y,b=
 static int redraw(size_t first) { unsigned int cells[MAX_COLS];unsigned char inverse[MAX_COLS],connector[MAX_COLS];size_t total=physical_rows(),old=displayed_rows,last=(old>total?old:total)-1,logical,chunk,physical=0,cursor_visual=0,count=0;long cursor_physical;
  (void)first;ptr_trace("redraw entry origin=%ld console_row=%ld total=%zu last=%ld",screen_origin,console_row,total,last);if(move_rows(screen_origin-console_row))return-1;cursor_physical=cursor_physical_row(total);
  for(logical=0;logical<line_count;++logical){count=build_cells(logical,cells,inverse,connector,&cursor_visual);for(chunk=0;chunk<line_rows(logical);++chunk,++physical){if(draw_row(logical,chunk,cells,inverse,connector,count,pointer_cell))return-1;if(physical==0){if(paint_indicator())return-1;}if(physical!=last){if(bytes("\r\n"))return-1;if(console_row==(long)terminal_rows-1)console_scrolled();else console_row++;}}}
- /* Task 60: the arrow may sit ABOVE the typing frame (on the banner); the
+ /* the arrow may sit ABOVE the typing frame (on the banner); the
   * frame's own rows do not cover it, and a screen scroll would otherwise
   * strand it off-screen.  Repaint its row, then return to the tail start.
-  * Task 64: the row it LEFT may also be a banner row (a hover move from the
+ * the row it LEFT may also be a banner row (a hover move from the
   * banner into the frame); repaint that row too, or it trails. */
  if(pointer_marker_visible()){
   long br=pointer_cell.y>=0&&pointer_cell.y<screen_origin?pointer_cell.y:-1;
@@ -666,11 +666,11 @@ static int redraw(size_t first) { unsigned int cells[MAX_COLS];unsigned char inv
   if(bo>=0&&bo!=br){if(move_rows(bo-console_row))return-1;if(draw_physical_row(bo,pointer_cell))return-1;}
   if(br>=0||bo>=0){if(move_rows(screen_origin+(long)physical-console_row))return-1;}
  }
- /* Task 60: and the arrow may sit BELOW the frame's last row; extend the
+ /* and the arrow may sit BELOW the frame's last row; extend the
   * empty-row tail so the redraw covers it too.  When the main loop ended on
   * the frame's last row no \r\n followed, so align before the tail starts. */
  {long end=last;if(pointer_marker_visible()&&pointer_cell.y>=0&&pointer_cell.y-screen_origin>end)end=pointer_cell.y-screen_origin;
- /* Task 64: a full redraw must cover the row the arrow LEFT too (it may sit
+ /* a full redraw must cover the row the arrow LEFT too (it may sit
   * BELOW the new cell - a drag upward), or that arrow survives as a trail. */
  if(pointer_marker_visible()&&painted_cell.y>=0&&painted_cell.y-screen_origin>end)end=painted_cell.y-screen_origin;
  if(physical<=end&&console_row==screen_origin+(long)physical-1){if(bytes("\r\n"))return-1;if(console_row==(long)terminal_rows-1)console_scrolled();else console_row++;}
@@ -678,11 +678,11 @@ static int redraw(size_t first) { unsigned int cells[MAX_COLS];unsigned char inv
  displayed_rows=total;if(place_cursor((long)last,cursor_physical))return-1;
  ptr_trace("redraw exit origin=%ld console_row=%ld",screen_origin,console_row);
  if(flush_out())return -1;
- /* Task 64: painted_cell is set by draw_row at the moment the arrow is
+ /* painted_cell is set by draw_row at the moment the arrow is
   * actually painted (keyed to console_row) and decremented by every scroll
   * (console_scrolled), so it always names the row the arrow is ON.  A final
   * assignment here would re-store the pre-scroll row and bring the trail
-  * back (measured: the task-60 edit's assignment did exactly that). */
+ * back (measured: the earlier assignment did exactly that). */
  return 0; }
 static int decode_byte(unsigned char b,unsigned int *cp,unsigned int *acc,int *need){if(!*need){if(b<0x80){*cp=b;return 1;}if((b&0xe0)==0xc0)*acc=b&31,*need=1;else if((b&0xf0)==0xe0)*acc=b&15,*need=2;else if((b&0xf8)==0xf0)*acc=b&7,*need=3;else return-1;return 0;}if((b&0xc0)!=0x80){*need=0;return-1;}*acc=(*acc<<6)|(b&63);if(!--*need){*cp=*acc;return 1;}return 0;}
 static int any_pointer_button_down(void) { size_t i;for(i=0;i<pointer_device_count;++i)if(pointer_devices[i].left_down)return 1;return 0; }
@@ -712,20 +712,20 @@ static int pointer_coalesce_paint(void) { int any=0,structural=0,was_down=pointe
  if(pointer_visible&&!structural&&before.x==pointer_cell.x&&before.y==pointer_cell.y)return 0;
  if(was_down||pointer_down||structural){if(redraw(0))return -1;}
  else if(repaint_pointer(before,pointer_cell))return -1;
- /* Task 52: painted_cell is maintained by the paint functions themselves
+ /* painted_cell is maintained by the paint functions themselves
   * (repaint_pointer and redraw), so every path that paints also records what
   * it painted and the paint-on-change rule can never drift from the screen. */
  if(test_paint_marker)emit_paint_marker();
  return 0;
 }
-/* ---- Task 60: the arrow exists from the first frame ---- */
+/* ---- the arrow exists from the first frame ---- */
 static long now_ms(void) { struct timeval tv; gettimeofday(&tv,NULL); return (long)tv.tv_sec*1000+tv.tv_usec/1000; }
 /* The cursor-position query only makes sense on the real console: a pty's
  * cursor starts at row 0 (the origin is trivially 0 there), and the suite
  * and the fuzzer run the editor on ptys where the stream must stay exactly
  * as before. */
 static int is_vt_console(void) { int kb=0; return ioctl(tty_fd,KDGKBTYPE,&kb)>=0; }
-/* Task 60 diagnostic: read_banner findings appended to the pointer debug
+/* diagnostic: read_banner findings appended to the pointer debug
  * log (which the guest profile already enables), so a silent snapshot
  * failure can be told from a successful one without touching the screen. */
 static void banner_debug(const char *fmt, ...) { FILE *f;va_list ap;
@@ -752,7 +752,7 @@ static size_t vcsu_parse(const unsigned char *h,size_t *rows,size_t *cols) { uns
  * from /dev/vcsu (the foreground VT's cell contents), once the CPR reply
  * has located the frame.  A read failure, a missing device, or an
  * unrecognised layout leaves banner_count at 0: those rows then redraw as
- * empty rows, exactly as before task 60. */
+ * empty rows, exactly as before. */
 static void read_banner(void) { int fd;unsigned char buf[16+4*MAX_COLS*64];ssize_t got;size_t r,c,n,cols,hs,cellbytes;char hex[32*3+1];size_t h;
  banner_count=0;if(screen_origin<=0)return;
  fd=open("/dev/vcsu",O_RDONLY);if(fd<0){banner_debug("open /dev/vcsu failed errno=%d",errno);return;}
@@ -783,14 +783,14 @@ static void read_banner(void) { int fd;unsigned char buf[16+4*MAX_COLS*64];ssize
  }
  banner_debug("snapshot rows=%zu len0=%zu len1=%zu first U+%04X U+%04X",banner_count,banner_len[0],banner_len[1],banner_len[1]?banner_cells[1][0]:0,banner_len[1]>1?banner_cells[1][1]:0);
 }
-/* Task 60: the first motion after a viewer connects is measured to be LOST
+/* the first motion after a viewer connects is measured to be LOST
  * on the host side - 3/3 first commanded motions and 1/3 second motions
  * delivered no events to ANY pointer device, so the editor had nothing to
  * log or paint and the screen showed no arrow at all until the first
  * delivered event.  Paint the arrow on the first frame at the tablet's
  * REGISTERED position (the last cell the guest kernel saw), so the screen
  * always carries exactly one arrow at the model's last-known cell; the
- * first delivered event re-anchors it to the hand (task 46). */
+ * first delivered event re-anchors it to the hand. */
 static void paint_startup_arrow(void) { size_t i;struct Cell c;
  if(startup_arrow_done)return;startup_arrow_done=1;
  for(i=0;i<pointer_device_count;++i)if(pointer_devices[i].kind==POINTER_ABS)break;
@@ -806,7 +806,7 @@ static int mouse_test(void) { struct PointerMap m;struct DragState s={0};struct 
  {0,32,-16,0,0,0,0,1280,800,80,25,10,10,12,10}};
  for(i=0;i<(int)(sizeof(maps)/sizeof(maps[0]));++i){m.absolute=maps[i].absolute;m.raw_x=maps[i].x;m.raw_y=maps[i].y;m.min_x=maps[i].minx;m.max_x=maps[i].maxx;m.min_y=maps[i].miny;m.max_y=maps[i].maxy;m.fb_w=maps[i].fw;m.fb_h=maps[i].fh;m.cols=maps[i].cols;m.rows=maps[i].rows;m.previous=(struct Cell){maps[i].px,maps[i].py};c=map_pointer(&m);printf("MAP %d abs=%d raw=(%ld,%ld) range=(%ld..%ld,%ld..%ld) fb=%ldx%ld geo=%ldx%ld -> cell=(%ld,%ld) expect=(%ld,%ld)\n",i+1,m.absolute,m.raw_x,m.raw_y,m.min_x,m.max_x,m.min_y,m.max_y,m.fb_w,m.fb_h,m.cols,m.rows,c.x,c.y,maps[i].ex,maps[i].ey);ok&=c.x==maps[i].ex&&c.y==maps[i].ey;}
  printf("MAP table %s\n",ok?"PASS":"FAIL");s=drag_step(s,DRAG_LEFT_DOWN,(struct Cell){7,0});s=drag_step(s,DRAG_MOVE,(struct Cell){5,1});s=drag_step(s,DRAG_LEFT_UP,(struct Cell){5,1});printf("DRAG pure anchor=(%ld,%ld) current=(%ld,%ld) kept=%d\n",s.anchor.x,s.anchor.y,s.current.x,s.current.y,!s.down&&s.moved);ok&=!s.down&&s.moved;
- /* Task 77 (finding 3): ASCII lines now render left-to-right, so the same
+ /* ASCII lines now render left-to-right, so the same
   * "drag across the whole line" act starts at the left cell (5, the first
   * logical character) and ends at the right cell (7); the asserted values
   * are unchanged and were measured identical on the pre-77 renderer. */
@@ -814,7 +814,7 @@ static int mouse_test(void) { struct PointerMap m;struct DragState s={0};struct 
  if(delete_selection()&&insert_cp('Z'))printf("TYPE line0=%c lines=%zu\n",(char)lines[0].cp[0],line_count);else ok=0;ok&=line_count==1&&lines[0].len==1&&lines[0].cp[0]=='Z';printf("DRAG/type %s\n",ok?"PASS":"FAIL");
  memset(lines,0,sizeof(lines));line_count=1;lines[0].cp[0]='X';lines[0].cp[1]='Y';lines[0].cp[2]='Z';lines[0].len=3;cursor_line=0;cursor_col=1;anchor_line=0;anchor_col=0;copy_selection();delete_selection();apply_pointer_drag(DRAG_MIDDLE,(struct Cell){0,0});printf("MIDDLE paste len=%zu line0=%c%c%c clipboard=%c\n",lines[0].len,(char)lines[0].cp[0],(char)lines[0].cp[1],(char)lines[0].cp[2],(char)clipboard[0]);ok&=lines[0].len==3&&lines[0].cp[0]=='X'&&lines[0].cp[1]=='Y'&&lines[0].cp[2]=='Z';printf("MIDDLE %s\n",ok?"PASS":"FAIL");
  anchor_line=0;anchor_col=0;cursor_line=1;cursor_col=2;apply_pointer_drag(DRAG_LEFT_DOWN,(struct Cell){6,0});apply_pointer_drag(DRAG_LEFT_UP,(struct Cell){6,0});pointer_logical((struct Cell){6,0},&r,&col);printf("CLICK selection=%d cursor=(%zu,%zu)\n",has_selection(),cursor_line,cursor_col);ok&=!has_selection();
- /* Task 54: pointer hit-testing across a shadda+vowel combo, through the
+ /* pointer hit-testing across a shadda+vowel combo, through the
   * real pointer_logical/visual_source path.  A clicked cell must map back
   * to the first logical column of the pair the cell draws.  The buffers are
   * typed in shadda-then-vowel order, what the console produces. */
@@ -838,7 +838,7 @@ static int mouse_test(void) { struct PointerMap m;struct DragState s={0};struct 
   pointer_logical((struct Cell){7,0},&r,&col);ok54&=col==0;   /* meem cell */
   ok&=ok54;printf("TASK54 combo hit-test %s\n",ok54?"PASS":"FAIL");
  }
- /* Task 77 (finding 3): mixed Latin/Arabic lines.  An ASCII island keeps its
+ /* mixed Latin/Arabic lines. An ASCII island keeps its
   * own left-to-right order inside the word, the Arabic word stays word-
   * reversed, the pointer round-trip maps every cell back to its logical
   * column, and the layout survives insertion and deletion.  The Arabic word
@@ -885,7 +885,7 @@ static int mouse_test(void) { struct PointerMap m;struct DragState s={0};struct 
   pointer_event(&pointer_devices[0],&up);printf("DEVICE A release after B move -> button=%d\n",pointer_down);ok&=!pointer_down;
   pointer_devices[0].abs_y=1000;pointer_devices[1].abs_y=1000;pointer_event(&pointer_devices[0],&samea);c=pointer_cell;pointer_event(&pointer_devices[1],&sameb);printf("RANGE same raw=(1000,1000): A=(%ld,%ld) B=(%ld,%ld)\n",c.x,c.y,pointer_cell.x,pointer_cell.y);ok&=(c.x!=pointer_cell.x||c.y!=pointer_cell.y);
  }
- /* Task 46: the aggregate is the only poison.  An absolute event SETS the
+ /* the aggregate is the only poison. An absolute event SETS the
   * position; a relative event MOVES it from the current cell scaled by the
   * framebuffer/cell size - even a relative event from the very node that
   * just reported absolute, the exact case that froze the owner's arrow; a
@@ -957,7 +957,7 @@ static int pointer_test(int arrow_mode,int moves) { struct winsize ws;struct Poi
  }
  close(tty_fd);return 0;
 }
-/* ---- Task 43: scripted pointer bursts through the real poll loop ---- */
+/* ---- scripted pointer bursts through the real poll loop ---- */
 static int editor_loop(void);
 static const char *test_mode_name; static int test_marker, marker_done;
 static void script_abs(int fd,int code,int value){ struct input_event ev;ssize_t w;memset(&ev,0,sizeof(ev));ev.type=EV_ABS;ev.code=code;ev.value=value;w=write(fd,&ev,sizeof(ev));(void)w; }
@@ -991,16 +991,16 @@ static void burst_script(const char *mode,int abs_fd,int rel_fd,int mice_fd){
   int b;for(b=0;b<60;++b){int k;for(k=0;k<30;++k){long cx=((long)b*13+k*7)%80,cy=((long)b*5+k*3)%25;
    script_abs(abs_fd,ABS_X,cx*410);script_abs(abs_fd,ABS_Y,cy*1311);}
    usleep(20000);}
- }else if(!strcmp(mode,"drift0")||!strcmp(mode,"drift")){ /* task 46: an absolute position, then (drift) a flood from the AGGREGATE worth 20+ cells that must be ignored */
+ }else if(!strcmp(mode,"drift0")||!strcmp(mode,"drift")){ /* an absolute position, then (drift) a flood from the AGGREGATE worth 20+ cells that must be ignored */
   script_abs(abs_fd,ABS_X,16384);script_abs(abs_fd,ABS_Y,16384); /* (40,12) */
   if(!strcmp(mode,"drift")){int k;
    for(k=0;k<6;++k)script_mice(mice_fd,127,0,0); /* 5 cells per packet, 30 cells if applied */
    for(k=0;k<4;++k)script_mice(mice_fd,0,127,0); /* 5 rows per packet, 20 rows if applied */
   }
- }else if(!strcmp(mode,"relonly")){ /* task 46: relative-only tracking - no absolute event ever arrives */
+ }else if(!strcmp(mode,"relonly")){ /* relative-only tracking - no absolute event ever arrives */
   int k;for(k=0;k<4;++k){script_rel(rel_fd,REL_X,24);script_rel(rel_fd,REL_Y,43);} /* (1,1)..(4,4) */
   script_rel(rel_fd,REL_X,480);script_rel(rel_fd,REL_Y,215); /* (24,9) */
- }else if(!strcmp(mode,"absthenrel")){ /* task 46: absolute then relative from the SAME node, then absolute again */
+ }else if(!strcmp(mode,"absthenrel")){ /* absolute then relative from the SAME node, then absolute again */
   script_abs(abs_fd,ABS_X,16384);script_abs(abs_fd,ABS_Y,16384); /* (40,12) */
   script_rel(abs_fd,REL_X,48); /* +2 cells (24px/cell) */
   script_rel(abs_fd,REL_Y,43); /* +1 row (43px/row) */
@@ -1009,26 +1009,26 @@ static void burst_script(const char *mode,int abs_fd,int rel_fd,int mice_fd){
   script_rel(abs_fd,REL_X,-96); /* -4 cells */
   script_rel(abs_fd,REL_Y,-86); /* -2 rows: back to (40,12) */
   script_abs(abs_fd,ABS_X,32767);script_abs(abs_fd,ABS_Y,32767); /* re-anchor (79,24) */
- }else if(!strcmp(mode,"interboth")){ /* task 46: abs jitter inside one cell interleaved with a sub-cell rel wiggle and ignored mice packets */
+ }else if(!strcmp(mode,"interboth")){ /* abs jitter inside one cell interleaved with a sub-cell rel wiggle and ignored mice packets */
   script_abs(abs_fd,ABS_X,16384);script_abs(abs_fd,ABS_Y,16384); /* (40,12) */
   {int k;for(k=0;k<100;++k){
    script_abs(abs_fd,ABS_X,16384+(k&1?150:0));script_abs(abs_fd,ABS_Y,16384+(k&1?0:150));
    script_rel(rel_fd,REL_X,k&1?1:-1); /* sub-cell wiggle: 0 cells at 24px/cell */
    script_mice(mice_fd,k&1?127:-127,0,0); /* 5 cells if applied: ignored */
   }}
- }else if(!strcmp(mode,"scrollmove")){ /* task 64: an arrow mid-screen, then the harness types enough Enters to bottom the frame out and scroll it, then one more move.  The scrolls shift the painted arrow up a row each; the fixed editor tracks that (painted_cell follows the scroll), the broken one erases the pre-scroll row and leaves a trail. */
+ }else if(!strcmp(mode,"scrollmove")){ /* an arrow mid-screen, then the harness types enough Enters to bottom the frame out and scroll it, then one more move. The scrolls shift the painted arrow up a row each; the fixed editor tracks that (painted_cell follows the scroll), the broken one erases the pre-scroll row and leaves a trail. */
   script_abs(abs_fd,ABS_X,16384);script_abs(abs_fd,ABS_Y,16384); /* (40,12) */
   usleep(2000000); /* the harness types ~30 Enters in this window */
   script_abs(abs_fd,ABS_X,60*410);usleep(30000);
   script_abs(abs_fd,ABS_Y,10*1311);usleep(30000);
- }else if(!strcmp(mode,"sweep8")){ /* task 52: eight paced moves across the grid; every X and every Y event changes the cell, so the parent's coalescing paints exactly once per event */
+ }else if(!strcmp(mode,"sweep8")){ /* eight paced moves across the grid; every X and every Y event changes the cell, so the parent's coalescing paints exactly once per event */
   long cxy[8][2]={{2,2},{10,5},{22,0},{40,12},{60,18},{70,20},{74,3},{78,24}};
   int m;for(m=0;m<8;++m){
    script_abs(abs_fd,ABS_X,cxy[m][0]*410);usleep(30000);
    script_abs(abs_fd,ABS_Y,cxy[m][1]*1311);usleep(30000);
   }
   usleep(200000);
- }else if(!strcmp(mode,"dragignored")){ /* task 46: press and release on the AGGREGATE, motion on the evdev nodes */
+ }else if(!strcmp(mode,"dragignored")){ /* press and release on the AGGREGATE, motion on the evdev nodes */
   script_abs(abs_fd,ABS_X,32359);script_abs(abs_fd,ABS_Y,0); /* (79,0) */
   usleep(30000); /* let the parent drain: the pointer now sits at (79,0) */
   script_mice(mice_fd,0,0,1); /* press from the aggregate - an ignored movement source */
@@ -1067,7 +1067,7 @@ static void emit_test_marker(void){ char inv[512],buf[768];int n;
   anchor_line,anchor_col,cursor_line,cursor_col,inv);
  {ssize_t w=write(tty_fd,buf,(size_t)n);(void)w;}
 }
-/* Task 52: one record per coalesced paint, written to the tty only in the
+/* one record per coalesced paint, written to the tty only in the
  * sweep8 test mode (test_paint_marker), right after the paint bytes have
  * flushed.  n is the count of accepted movement events so far, so the
  * harness can align the record with the same event's calibration-log line
@@ -1113,7 +1113,7 @@ static int burst_test(const char *mode){ struct winsize ws;struct PointerDevice 
  kill(child,SIGTERM);(void)waitpid(child,NULL,0);
  close(tty_fd);return rc;
 }
-/* ---- Task 51: one-shot input diagnostic ---- */
+/* ---- one-shot input diagnostic ---- */
 /* Reads a console (default /dev/tty1) in raw mode for ~20 s and writes a hex
  * dump of every byte the console delivers to /tmp/tty-keys.log - one "%02x"
  * line per byte, in arrival order, after a header line.  Nothing is ever
@@ -1140,7 +1140,7 @@ static int tty_keys_probe(const char *node,int seconds){ struct termios saved,ra
  }
  tcsetattr(fd,TCSANOW,&saved);close(fd);return 0;
 }
-/* Task 55: env-gated startup trace.  With AR_TYPE_START_DEBUG=1, one
+/* env-gated startup trace. With AR_TYPE_START_DEBUG=1, one
  * timestamped line per startup step is appended to /tmp/ar-type-start.log -
  * opening the tty, tcgetattr, tcsetattr (errno on failure), the window size,
  * the screen model, the first frame's byte count, entering the read loop,
@@ -1222,7 +1222,7 @@ int main(int argc,char **argv){struct termios raw;struct winsize ws;
  {long paint_before=out_bytes_total;
   if(redraw(0)){start_trace("first paint: FAILED, %ld bytes written",out_bytes_total-paint_before);goto done;}
   start_trace("first paint: %ld bytes written",out_bytes_total-paint_before);}
- /* Task 60: locate the typing frame on the real console, then paint the
+ /* locate the typing frame on the real console, then paint the
   * arrow at the tablet's registered position.  The reply arrives as
   * keyboard input and is consumed by the loop (cpr_pending); a terminal
   * that never answers keeps the origin at 0 and paints the arrow there. */
@@ -1249,7 +1249,7 @@ static int editor_loop(void){ enum{NORMAL,ESC,CSI,SS3}state=NORMAL;unsigned char
   for(i=0;i<MAX_POINTER_DEVICES;++i){fds[3+i].fd=i<pointer_device_count?pointer_devices[i].fd:-1;fds[3+i].events=POLLIN;}
   timeout=pointer_poll_timeout(cpr_pending?100:-1);
   pr=poll(fds,nf,timeout);if(pr<0){start_trace("poll: error errno=%d (%s)",errno,strerror(errno));continue;}
-  if(pr==0){ /* task 60: a CPR query that is never answered must not leave the arrow unpainted */
+ if(pr==0){ /* a CPR query that is never answered must not leave the arrow unpainted */
    if(cpr_pending&&now_ms()-cpr_sent_ms>=2000){cpr_pending=0;screen_origin=0;ptr_trace("cpr timeout: origin=0 console_row=%ld",console_row);read_banner();paint_startup_arrow();}
    pointer_scan_if_due();
    continue;}
@@ -1268,14 +1268,14 @@ static int editor_loop(void){ enum{NORMAL,ESC,CSI,SS3}state=NORMAL;unsigned char
    if(state==ESC){if(b=='['){state=CSI;p1=p2=field=0;continue;}if(b=='O'){state=SS3;continue;}if(b==' '){latin_mode=!latin_mode;state=NORMAL;if(redraw(0))return -1;continue;}state=NORMAL;continue;}
    if(state==SS3){state=NORMAL;/* Arrow keys follow screen direction; edits remain logical. */if(b=='D'&&cursor_col<lines[cursor_line].len)++cursor_col;else if(b=='C'&&cursor_col)--cursor_col;else if(b=='H')cursor_col=0;else if(b=='F')cursor_col=lines[cursor_line].len;else continue;clear_selection();if(redraw(0))return -1;continue;}
    if(state==CSI){if(b>='@'&&b<='~'){int p=field?p2:p1;extend=(p1==1&&p2==2);state=NORMAL;if(b=='A'&&cursor_line){--cursor_line;cursor_col=extend?0:(cursor_col>lines[cursor_line].len?lines[cursor_line].len:cursor_col);changed=1;}else if(b=='B'&&cursor_line+1<line_count){++cursor_line;cursor_col=extend?0:(cursor_col>lines[cursor_line].len?lines[cursor_line].len:cursor_col);changed=1;}else if(b=='D'&&cursor_col<lines[cursor_line].len){++cursor_col;changed=1;}else if(b=='C'&&cursor_col){--cursor_col;changed=1;}else if(b=='H'||(b=='~'&&(p==1||p==7))){cursor_col=0;changed=1;}else if(b=='F'||(b=='~'&&(p==4||p==8))){cursor_col=lines[cursor_line].len;changed=1;}else if(b=='~'&&p==3){changed=has_selection()?delete_selection():delete_cp();}else if(b=='R'&&cpr_pending){cpr_pending=0;screen_origin=p1>0?(long)p1-1:0;ptr_trace("cpr reply p1=%d: origin=%ld console_row was %ld",p1,screen_origin,console_row);console_row=screen_origin;read_banner();if(!startup_arrow_done)paint_startup_arrow();}if(changed||(!extend&&was_selection)){if(!extend)clear_selection();if(redraw(0))return -1;}continue;}if(b==';'){field=1;continue;}if(b>='0'&&b<='9'){int *q=field?&p2:&p1;if(*q<1000000)*q=*q*10+b-'0';continue;}continue;}
-   /* Task 51: Ctrl+Space reaches the console program as the single byte
+  /* Ctrl+Space reaches the console program as the single byte
     * 0x00.  kbd 2.6.4's kbd_mode exposes no meta option, so the ESC+0x20
     * chord (kept above - free, and it fires once the meta bit exists) never
     * arrives; 0x00 is the toggle the console can actually deliver.  It is a
     * control byte: it toggles the mode and inserts nothing. */
    if(b==0&&!need){latin_mode=!latin_mode;if(redraw(0))return -1;continue;}
    if(b==0x1b&&!need){state=ESC;continue;}
-   /* Task 37: Ctrl+D is the shell's EOF - it exits ONLY on an empty line
+  /* Ctrl+D is the shell's EOF - it exits ONLY on an empty line
     * with no selection (the escape hatch for a deliberate exit).  On a
     * line with any content, or with a selection active, the byte does
     * NOTHING at all: no buffer change, no screen change, not even a
@@ -1289,7 +1289,7 @@ static int editor_loop(void){ enum{NORMAL,ESC,CSI,SS3}state=NORMAL;unsigned char
 }
 #ifdef AR_TYPE_SHELL
 /* ======================================================================== *
- * Shell mode — the Arabic-native editor (work order 65).                    *
+ * Shell mode — the Arabic-native editor.          *
  *                                                                           *
  * Built from the SAME translation unit as the typing window, compiled with   *
  * -DAR_TYPE_SHELL=1.  The typing main (above) is excluded in this build, and *
@@ -1314,7 +1314,7 @@ static size_t sh_prev_rows;          /* rows the live region last occupied */
 static struct termios sh_raw;        /* the editor's own raw termios */
 static char sh_wrapper[256], sh_shell[256];
 
-/* ---- WO79 D1: the prompt -------------------------------------------------
+/* ---- the prompt -------------------------------------------------
  * النظام/المستخدم/<dir>: at the RIGHT margin, its colon at the left end, the
  * typed command growing LEFTWARD after it (the RTL reading of
  * system/user/dir: command).  The third element is the session's own working
@@ -1330,7 +1330,7 @@ static char sh_wrapper[256], sh_shell[256];
  *
  * The marker is three ASCII dots, not "…": U+2026 has NO glyph in
  * out/console-16x32.psfu or out/console-8x16.psfu (measured from the psfu
- * unicode tables) and the fonts are not part of this order. */
+ * unicode tables) and the fonts are not part of this build. */
 #define SH_ED_MAX 128                /* file lines the editor holds */
 static const struct { const char *path, *name; } sh_dir_names[] = {
     { "/", "جذر" }, { "/usr", "موارد" }, { "/etc", "إعدادات" }, { "/bin", "برامج" },
@@ -1344,13 +1344,13 @@ static const struct { const char *path, *name; } sh_dir_names[] = {
 static unsigned int sh_prompt[MAX_COLS];
 static size_t sh_prompt_len;              /* codepoints; 0 = no prompt shown */
 static struct Line sh_line_save;          /* the typed line while the prompt shares lines[0] */
-static int sh_ed_active;                  /* WO79 D2: the file editor owns the line */
+static int sh_ed_active;         /* the file editor owns the line */
 static char sh_ed_path[4096];
 static char sh_ed_name[MAX_COLS];         /* the operand as typed, for the saving row */
 static struct Line sh_ed_lines[SH_ED_MAX];
 static size_t sh_ed_count, sh_ed_row;
 static int sh_ed_dirty, sh_ed_warned;
-/* WO83: the editor's bounded VIEWPORT.  The region is anchored at an absolute
+/* the editor's bounded VIEWPORT. The region is anchored at an absolute
  * console row (sh_ed_top; -1 = not anchored yet), its LAST row is always the
  * caret line, and the lines above it are re-shaped from the buffer and
  * repainted on every paint - never appended, never assumed to still be there.
@@ -1363,7 +1363,7 @@ static size_t sh_ed_prev_rows, sh_ed_static_now;
  * none, so the next Up/Down takes the caret's current atom as the goal. */
 static size_t sh_ed_goal = (size_t)-1;
 
-/* ---- WO85 D2: the pager (متصفح الصفحات) ----------------------------------
+/* ---- the pager (متصفح الصفحات) ----------------------------------
  * A full-screen built-in over LOGICAL text.  The file - or a captured
  * command's own logical output, never the shaping wrapper's display bytes -
  * is decoded to UTF-8 codepoints, split into display lines of at most MAX_COLS
@@ -1478,8 +1478,8 @@ static void sh_dir_display(char *out, size_t outsz) {
     *o = 0;
     if (!*out) { const char *r = sh_dir_name("/"); snprintf(out, outsz, "%s", r ? r : "/"); }
 }
-/* WO79 D1 (measured on the installed build): the ONE engine lays a maximal
- * ASCII run out FORWARD - the task-77 Latin-island rule, right for paths
+/* the ONE engine lays a maximal
+ * ASCII run out FORWARD - the Latin-island rule, right for paths
  * quoted inside Arabic text.  For prompt text that rule glues the dir element
  * and the terminating colon into a single island, so "~" + ":" painted as
  * "/~:" (colon at the island's RIGHT end, cell 64 of the live row) and the
@@ -1580,7 +1580,7 @@ static void sh_prompt_refresh(void) {
  * one, so both the live region's origin and a painted arrow must follow. */
 static void sh_scrolled(void) {
     if (sh_row_origin > 0) sh_row_origin--;
-    if (sh_ed_top > 0) sh_ed_top--;          /* WO83: the editor's region shifts too */
+  if (sh_ed_top > 0) sh_ed_top--;     /* the editor's region shifts too */
     if (painted_cell.y >= 0) painted_cell.y--;
 }
 
@@ -1620,10 +1620,10 @@ static void sh_delete_range(size_t a, size_t b) {
     lines[0].len -= (b - a);
 }
 
-static void sh_ed_join_back(void);   /* WO83: defined with the editor below */
+static void sh_ed_join_back(void);  /* defined with the editor below */
 static void sh_ed_join_fwd(void);
 /* Backspace deletes the atom logically BEFORE the caret (the cell to its
- * right on screen).  At index 0 of a FILE line (WO83) the atom before the
+ * right on screen). At index 0 of a FILE line, the atom before the
  * caret lives on the line above: the two lines join and that atom is deleted,
  * as the line-editor contract has it.  At the very first file line - and on
  * the shell's single line - it stays a no-op: no visible character may ever be
@@ -1640,7 +1640,7 @@ static void sh_backspace(void) {
     sh_delete_range(a, sh_caret);
     sh_caret = a;
 }
-/* Delete removes the atom AT the caret; at the END of a file line (WO83) it
+/* Delete removes the atom AT the caret; at the END of a file line, it
  * joins the line below into this one (nothing is deleted by that join). */
 static void sh_delete_fwd(void) {
     size_t b;
@@ -1660,7 +1660,7 @@ static int sh_insert(unsigned int cp) {
     if (sh_caret > lines[0].len) sh_caret = lines[0].len;   /* never a stale caret */
     if (sh_ed_active) sh_ed_goal = (size_t)-1;              /* typing resets the goal */
     if (transparent(cp) && sh_caret == 0) return 0;
-    /* WO79 D1: the prompt shares lines[0] with the typed line when painted,
+  /* the prompt shares lines[0] with the typed line when painted,
      * so the typed line may grow only to the room the prompt leaves. */
     if (lines[0].len + sh_prompt_len >= MAX_COLS) return 0;
     memmove(&lines[0].cp[sh_caret + 1], &lines[0].cp[sh_caret],
@@ -1745,7 +1745,7 @@ static int sh_paint_row(long crow, size_t cnt, const unsigned int *cl,
     return bytes("\033[0m");
 }
 
-/* ---- WO83: the editor's viewport -----------------------------------------
+/* ---- the editor's viewport -----------------------------------------
  * One rectangle: from sh_ed_top down to the caret line, which is its LAST row.
  * The window is the tail of the buffer that fits the row budget (terminal_rows
  * - 1, so the region never claims the whole screen and the shell's command row
@@ -1846,7 +1846,7 @@ static int sh_ed_region(void) {
     return 0;
 }
 
-/* ---- WO85 A: the pager's screen ------------------------------------------
+/* ---- A: the pager's screen ------------------------------------------
  * Layout, painting, movement and search.  The pager paints through sh_paint()
  * - it owns the same live surface the prompt does - so the pointer path and
  * Ctrl+L repaint a page exactly as they repaint the prompt, with no second
@@ -2025,24 +2025,24 @@ static int sh_paint(void) {
     size_t content_rows, right, caret_row, target_rows;
     long caret_col;
 
-    if (sh_pg_active) return sh_pg_paint();   /* WO85: the pager owns the screen */
+  if (sh_pg_active) return sh_pg_paint();  /* the pager owns the screen */
 
-    /* Work order 79 (D1): the prompt is rebuilt from the session's own cwd on
-     * every paint.  Work order 80: it is NOT composed into lines[0] any more.
+  /* the prompt is rebuilt from the session's own cwd on
+   * every paint. It is NOT composed into lines[0] any more.
      * The typed line is laid out ALONE - exactly the cells it has with no
      * prompt at all - so nothing introduced for the prompt can reorder it: in
      * Latin mode the whole typed line is one forward island (spaces included)
      * and any Arabic keeps the established word order.  The prompt's own cells
-     * are laid out ALONE too (order 79's sh_prompt_run_order still owns that
+   * are laid out ALONE too (its own run-order function still owns that
      * array and nothing else) and appended to the RIGHT of the typed cells,
      * its colon leftmost.  Only the caret is offset by the prompt's cell
      * count, so the typed line grows leftward from the colon exactly as it
      * did.  The typed line is restored before anything else looks at
-     * lines[0].  Work order 66 (owner ruling): the mode indicator cell is
+   * lines[0]. The mode indicator cell is
      * DROPPED.  With no prompt (the editor's file line) the anchor stays the
-     * console's right border, exactly as work order 78 left it. */
+   * console's right border, exactly as before. */
     sh_ed_static_now = 0;
-    if (sh_ed_region()) return -1;   /* WO83: the editor's viewport repaints first */
+  if (sh_ed_region()) return -1;  /* the editor's viewport repaints first */
     sh_prompt_refresh();
     cursor_line = 0;
     cursor_col = sh_caret;
@@ -2099,7 +2099,7 @@ static int sh_paint(void) {
         }
     }
     sh_prev_rows = target_rows + sh_ed_static_now;
-    if (sh_ed_active) sh_ed_prev_rows = sh_prev_rows;   /* WO83: the whole region */
+  if (sh_ed_active) sh_ed_prev_rows = sh_prev_rows;  /* the whole region */
 
     if (move_rows(sh_row_origin + (long)caret_row - console_row)) return -1;
     if (bytes("\r")) return -1;
@@ -2153,7 +2153,7 @@ static size_t sh_utf8(unsigned int cp, char *o) {
     o[2] = (char)(0x80 | ((cp >> 6) & 63)); o[3] = (char)(0x80 | (cp & 63)); return 4;
 }
 
-/* Work order 78 (owner note 3): a message row the console itself draws
+/* a message row the console itself draws
  * anchors at the RIGHT margin, the way the banner and the live line do.  The
  * anchor is THIS ONE SWITCH: the number of blank cells printed before the
  * row's first cell.  A row at least as wide as the terminal gets no pad - it
@@ -2167,13 +2167,13 @@ static size_t msg_right_pad(size_t cells) {
 /* Built-ins use the same shaping engine as the editor.  They emit logical rows
  * through build_cells; no second placement rule is introduced here.
  * `lead_newline` is the only knob: every ordinary message row leads with the
- * blank line the transcript has always had, while the WO82 مساعدة table emits
+ * blank line the transcript has always had, while the مساعدة table emits
  * COMPACTLY - its first row keeps the lead newline (so the table starts on a
  * fresh line below the command line) and the rest follow one per line.  The
  * table cannot afford double spacing: its entries doubled would cost far more
- * than the console's 25 rows (19 entries already cost 38 of them, and N4e's 24
+ * than the console's 25 rows (19 entries already cost 38 of them, and the 24
  * leave even less room) and the first entries would scroll away before they
- * could be read (measured, REPORT-82 §S1).  Cells, shaping, padding and the scroll
+ * could be read (as measured). Cells, shaping, padding and the scroll
  * bookkeeping are identical on both paths. */
 static int sh_emit_row_spaced(const char *text, int lead_newline) {
     size_t i, n, pos = 0; unsigned int cp, acc = 0, cells[MAX_COLS];
@@ -2191,7 +2191,7 @@ static int sh_emit_row_spaced(const char *text, int lead_newline) {
         if (bytes("\r\n")) return -1;
         if (console_row == (long)terminal_rows-1) sh_scrolled(); else console_row++;
     }
-    /* WO78 D2: right-anchor the row (one switch, msg_right_pad). */
+  /* right-anchor the row (one switch, msg_right_pad). */
     for (i=0;i<msg_right_pad(n);i++) if (putcp(0x20)) return -1;
     for (i=0;i<n;i++) if (putcp(draw_codepoint(cells[i],conn[i]))) return -1;
     if (bytes("\r\n")) return -1;
@@ -2213,7 +2213,7 @@ static void sh_return_to_live(void) {
     } else {
         sh_row_origin = console_row;   /* pty: the tracked row after the CR LF */
     }
-    /* WO83: whatever was just written (a message, a command's output) sits
+  /* whatever was just written (a message, a command's output) sits
      * ABOVE the region, so the editor's viewport re-anchors to the row it was
      * given and repaints from there; the region's old rows above are stale and
      * deliberately not erased (the transcript rule every message already had). */
@@ -2223,7 +2223,7 @@ static void sh_return_to_live(void) {
     (void)sh_paint();
 }
 
-/* ---- WO79 D2: the console file editor (حرّر) -----------------------------
+/* ---- the console file editor (حرّر) -----------------------------
  * The file's lines live in memory; everything before the current line is
  * drawn through sh_emit_row (the same shaped, right-anchored rows every other
  * message uses, marks and all), and the CURRENT line IS lines[0] - so typing,
@@ -2315,7 +2315,7 @@ static int sh_edit_open(const char *name) {
                 if (cps > MAX_COLS) {
                     free(buf); sh_emit_row("حرّر: الملف كبير جدًا"); return 1;
                 }
-                /* WO95 D2: the same refusal rule for a line the codepoint
+        /* the same refusal rule for a line the codepoint
                  * model cannot hold WHOLE.  If the line's bytes are not
                  * exactly what its codepoints re-encode to - an embedded NUL,
                  * a malformed or truncated sequence, an overlong that decodes
@@ -2350,7 +2350,7 @@ static int sh_edit_open(const char *name) {
     if (sh_ed_count == 0) { sh_ed_lines[0].len = 0; sh_ed_count = 1; }
     snprintf(sh_ed_path, sizeof sh_ed_path, "%s", name);
     snprintf(sh_ed_name, sizeof sh_ed_name, "%s", name);
-    /* WO83: the file is NOT emitted as rows any more - the viewport shows the
+  /* the file is NOT emitted as rows any more - the viewport shows the
      * lines around the caret and repaints them.  The caret starts on the last
      * line (the same line the old append-only editor edited live); the region
      * anchors itself at the row this open leaves the cursor on. */
@@ -2362,13 +2362,13 @@ static int sh_edit_open(const char *name) {
     return 1;
 }
 
-/* ---- WO83: moving inside the buffer --------------------------------------
+/* ---- moving inside the buffer --------------------------------------
  * The live line IS the buffer's caret line (lines[0] == sh_ed_lines[sh_ed_row]
  * by invariant).  These are the two directions of that mapping and nothing
  * else: commit the live line into its buffer row before the caret leaves it,
  * load the row the caret lands on into the live line. */
 static void sh_ed_commit(void) {
-    sh_ed_lines[sh_ed_row] = lines[0];         /* WO83-MAP */
+  sh_ed_lines[sh_ed_row] = lines[0];     /* live line -> row */
 }
 static void sh_ed_load(void) {
     lines[0] = sh_ed_lines[sh_ed_row];
@@ -2397,10 +2397,10 @@ static void sh_ed_page(long dir) {
     if (page < 1) page = 1;
     sh_ed_move(dir * page);
 }
-/* Enter in the editor (WO83): SPLIT the line at the caret - the tail moves to
+/* Pressing Enter in the editor splits the line at the caret; the tail moves to
  * the line below and the caret starts it.  A caret already at the end of the
  * line therefore appends an empty line, which is exactly what the old
- * commit-and-append did, so the WO81 byte semantics are unchanged. */
+ * commit-and-append did, so the byte semantics are unchanged. */
 static void sh_ed_newline(void) {
     size_t tail;
     if (sh_ed_count >= SH_ED_MAX) {            /* refuse, never drop a line */
@@ -2473,14 +2473,14 @@ static void sh_ed_join_fwd(void) {
     (void)sh_paint();
 }
 /* Ctrl+S: write the file - UTF-8, one LF per line, logical order.
- * WO81 D4: the write is ATOMIC - every line goes to a temporary file in the
+ * the write is ATOMIC - every line goes to a temporary file in the
  * SAME directory and rename() puts it in place, so a crash, a full disk or a
  * failed write can never leave a half-written file where the old one was: the
  * old file stays intact until the rename succeeds, and a failed save removes
  * the temporary.  The temporary takes the target's own mode (and a symlink is
  * resolved first, so saving through one rewrites its target, not the link),
  * so an atomic save can neither loosen the mode nor replace the link.
- * WO95 D1: the temporary's name is UNPREDICTABLE and its creation EXCLUSIVE
+ * the temporary's name is UNPREDICTABLE and its creation EXCLUSIVE
  * (mkstemp's O_CREAT|O_EXCL retry loop) in that same resolved directory, so a
  * leftover of an earlier run - and a link planted at any candidate name - can
  * never be opened, let alone truncated before the write; the unlink below can
@@ -2517,7 +2517,7 @@ static int sh_ed_save(void) {
             e = errno; close(fd); unlink(tmp); sh_ed_save_err(e); return 0;
         }
     }
-    /* WO95 D1: every failure path CLOSES the descriptor - an fsync failure
+  /* every failure path CLOSES the descriptor - an fsync failure
      * used to short-circuit the close() and leak the open temporary. */
     if (fsync(fd) != 0) { e = errno; close(fd); unlink(tmp); sh_ed_save_err(e); return 0; }
     if (close(fd) != 0) { e = errno; unlink(tmp); sh_ed_save_err(e); return 0; }
@@ -2542,7 +2542,7 @@ static void sh_ed_quit(void) {
     sh_return_to_live();                       /* the live line becomes the prompt */
 }
 
-/* ---- WO85 B: the pager's session plumbing --------------------------------
+/* ---- B: the pager's session plumbing --------------------------------
  * One display line holds at most MAX_COLS codepoints.  A line that long folds
  * fold(1)-style: at its last space when it has one, else at the cap; a mark
  * arriving at a full line takes its base letter along, so no atom is ever cut
@@ -2684,7 +2684,7 @@ static int sh_pg_read_file(const char *path, char **out, size_t *outn) {
 /* PATH lookup, the rule execvp applies to a bare name: a name with a '/' in it
  * is used as it stands; otherwise each PATH directory is tried in order for an
  * executable.  Used by the pager's program mode (and by nothing else: the
- * ordinary line still goes through the شكل wrapper, order 84's contract). */
+ * ordinary line still uses the standard شكل wrapper path. */
 static int sh_program_path(const char *name, char *out, size_t outsz) {
     const char *p = getenv("PATH"), *s;
     size_t nl = strlen(name);
@@ -2807,8 +2807,8 @@ static void sh_pg_quit(void) {
  * translation produces in Latin mode, and the freed physical sentinels.
  * Space and ف forward, ب back, / searches, ن the next hit, ق and q and Ctrl+C
  * leave, ESC 0x20 toggles the Arabic/Latin mode as at the prompt, and
- * PageUp/PageDown page like ب and space.  WO94 (N3a) made the dispatch a
- * single normalise-then-switch; see sh_pg_feed. */
+ * PageUp/PageDown page like ب and space.  One normalise-then-switch drives
+ * the dispatch; see sh_pg_feed. */
 static int sh_pg_feed(unsigned char b) {
     static int st = 0, p1 = 0;
     static unsigned int qacc = 0;
@@ -2858,7 +2858,7 @@ static int sh_pg_feed(unsigned char b) {
         }
         return 0;
     }
-    /* WO94 (N3a / D4): ONE normalisation, ONE dispatch.
+  /* ONE normalisation, ONE dispatch.
      *
      * What stood here was two comparisons bracketing the decode, and that
      * split WAS the defect.  The literal-ASCII test ran BEFORE the decode, so
@@ -2896,7 +2896,7 @@ static int sh_pg_feed(unsigned char b) {
     return 0;
 }
 
-/* ---- WO85 D3: مساعدة lookup ---------------------------------------------
+/* ---- مساعدة lookup ---------------------------------------------
  * The table was refreshed by the owner's 2026-10-13 decision.  It has one
  * row per command (with genuine alternatives sharing a row), plus operational
  * hints.  The owner's 2026-10-13 round-5 decision restores three hints and
@@ -3003,7 +3003,7 @@ static int sh_help_lookup(const char *q) {
     return 1;
 }
 
-/* ---- WO85 D4: completion on the prompt line ------------------------------
+/* ---- completion on the prompt line ------------------------------
  * Tab completes the LAST word of the line (the caret is at its end):
  *   * the FIRST word is a command name - the session's built-ins plus every
  *     executable in PATH, read from the filesystem with readdir(3) right now,
@@ -3014,7 +3014,7 @@ static int sh_help_lookup(const char *q) {
  *     UTF-8 the typed line uses, and the completion is inserted as a logical
  *     word, never as a painted cell.
  * A name that is not one plain word (it contains a space) is inserted QUOTED,
- * in the form WO84's tokenizer reads back verbatim.  A completion replaces the
+ * in the form the tokenizer reads back verbatim. A completion replaces the
  * word and NEVER runs, links, expands or aliases anything; several candidates
  * are listed as Arabic rows instead of guessed at.  The editor's save path and
  * viewport are untouched: Tab stays inert while the editor owns the line. */
@@ -3083,7 +3083,7 @@ static void sh_comp_commands(struct sh_comp_list *l) {
         if (*p == ':') ++p;
     }
 }
-/* The word as WO84's tokenizer would read it back: the quoting (Quotes and \c)
+/* The word as the tokenizer would read it back: the quoting (Quotes and \c)
  * removed.  The completion runs on this reading, so a second Tab inside a name
  * this completion itself quoted - `اطبع 'دليل تجارب'/مل…` - still finds the
  * directory; the inserted text keeps the type form. */
@@ -3147,7 +3147,7 @@ static void sh_comp_paths(struct sh_comp_list *l, const char *word, int *dirlen)
     }
     closedir(d);
 }
-/* The safe quoting WO84's tokenizer reads back verbatim: a name with a space
+/* The safe quoting the tokenizer reads back verbatim: a name with a space
  * or tab is single-quoted; a name that also carries a quote (or any byte the
  * tokenizer reads specially) keeps the plain form and backslash-escapes each
  * such byte (the tokenizer's \c reads the byte literally, and so does bash on
@@ -3186,7 +3186,7 @@ static void sh_complete(void) {
     char word[MAX_COLS * 4 + 1], dword[MAX_COLS * 4 + 1], prevb[MAX_COLS * 4 + 1];
     int first = 1, cmdmode = 0, dirlen = 0;
     if (sh_caret != lines[0].len) return;         /* only at the line's end */
-    /* The completed argument is found with WO84's own word rule, not by
+  /* The completed argument is found with the word rule, not by
      * splitting on spaces: a space (or tab) ends the word only at quote level
      * zero and adjacent quoted or escaped parts concatenate.  `اطبع
      * 'دليل تجارب'/مل` is therefore ONE word (the old space split cut it at
@@ -3299,7 +3299,7 @@ static void sh_complete(void) {
 }
 static int sh_exit_requested;
 
-/* ---- WO84: ONE argument contract (plan step S8) -------------------------
+/* ---- ONE argument contract -----------------------------------------
  * The session's own tokenizer, used by every line the session executes
  * itself: the built-ins and شغّل.  The grammar is bounded and explicit:
  *
@@ -3311,9 +3311,9 @@ static int sh_exit_requested;
  *   ''      a real EMPTY argument
  *
  * An unmatched quote refuses the whole line BEFORE anything is forked or
- * executed - no partial execution, no child (D3).
+ * executed - no partial execution, no child.
  *
- * WO99 N4a adds the composition grammar on top of those words - still ONE
+ * The parser adds the composition grammar on top of those words - still ONE
  * operator table, still validated in full before anything runs:
  *
  *   pipeline := stage ('|' stage)*
@@ -3441,7 +3441,7 @@ static int sh_word_close(char *buf, size_t *n, size_t bufsz, int *inword,
     return 0;
 }
 
-/* The ONE line parser (WO84's word rules, WO99's composition grammar).  It
+/* The ONE line parser (the word rules and the composition grammar). It
  * runs to completion - or refuses - BEFORE the caller opens a redirection
  * target, forks a stage or executes anything, so a malformed or unsupported
  * line cannot partially run.  Returns 0, or one of the SH_SPLIT_* codes. */
@@ -3528,7 +3528,7 @@ static int sh_parse(const char *line, char *buf, size_t bufsz, struct ShPipe *p)
 }
 
 /* Every refusal is one Arabic row in the command's own voice, and nothing
- * runs.  The two new fragments (this order's extension of TASK-67 §4.3's
+ * runs. The two new fragments (this parser extension's
  * table: `علامة تنصيص غير مغلقة` and `غير مدعوم`) are the only way the
  * session can FAIL CLEARLY on what the bounded grammar does not take;
  * `عدد المعاملات غير صحيح` is the shipped wording of tools/mujammi.c:243. */
@@ -3547,7 +3547,7 @@ static void sh_arg_refuse(const char *cmd, int rc) {
     sh_emit_row(row);
 }
 
-/* WO99 N4b: a built-in that is interactive or changes the session's own state
+/* a built-in that is interactive or changes the session's own state
  * (اخرج closes the session, انتقل moves it, حرّر takes over the screen,
  * شغّل and متصفح take over the console) cannot be one stage of a composition:
  * refused before anything runs. */
@@ -3557,7 +3557,7 @@ static void sh_arg_refuse_composition(const char *cmd) {
     sh_emit_row(row);
 }
 
-/* ---- WO85 D2: متصفح الصفحات <ملف|برنامج> [معاملات…] ---------------------
+/* ---- متصفح الصفحات <ملف|برنامج> [معاملات…] ---------------------
  * The pager's command.  A file the filesystem has - anything stat(2) finds,
  * or anything with a '/' in it - is paged as a file; anything else is looked
  * up in PATH and run, and its logical output is paged.  The caps and the
@@ -3589,7 +3589,7 @@ static int sh_pg_open(int argc, char **argv) {
     return 1;                                     /* the caller repaints */
 }
 
-/* ---- N4d: ONE child lifecycle for every route ---------------------------
+/* ---- ONE child lifecycle for every route -------------------------------
  * An ordinary line, شغّل and every stage of a composition now start their child
  * the same way and end it the same way.  What "the same way" means, exactly:
  *
@@ -3617,7 +3617,7 @@ static int sh_pg_open(int argc, char **argv) {
  * The composition executor keeps its own multi-child reap loop (it must wait
  * for many), but shares these three pieces, so the routes cannot drift. */
 
-/* N4d: typed bytes the child has not read yet.  The feed end is non-blocking,
+/* typed bytes the child has not read yet. The feed end is non-blocking,
  * so a child that stops reading backs up here instead of freezing this loop -
  * a frozen loop could not even deliver the ^C that would end the wait.  The
  * buffer is bounded; past it the OLDEST byte goes and the log says so (losing
@@ -3721,7 +3721,7 @@ static void sh_status_row(int status) {
            WIFSIGNALED(status) ? WTERMSIG(status) : -1);
 }
 
-/* ---- WO84: شغّل runs its whole argument vector through the SAME execution
+/* ---- شغّل runs its whole argument vector through the SAME execution
  * path as an ordinary line - the شكل wrapper - passing the vector itself,
  * never a re-quoted string: {wrapper, bash, "-c", "$@", "bash", operands…}.
  * bash's "$@" re-expands to the original words verbatim (no re-splitting, no
@@ -3750,7 +3750,7 @@ static void sh_run_program(int argc, char **argv) {
     for (i = 1; i < argc; ++i) wargv[4 + i] = argv[i];
     wargv[4 + argc] = NULL;
     if (pipe(pfd) != 0) { sh_emit_row("شغّل: تعذر تشغيل البرنامج"); return; }
-    /* N4d: only the parent keeps the feed end past an exec; a child of this
+  /* only the parent keeps the feed end past an exec; a child of this
      * session must never hold it open, or the reader would wait for an EOF
      * that only this loop can deliver. */
     fcntl(pfd[1], F_SETFD, FD_CLOEXEC);
@@ -3776,12 +3776,12 @@ static void sh_run_program(int argc, char **argv) {
      * has run a single instruction still reaches -pid. */
     setpgid(pid, pid);
     feed = pfd[1];
-    sh_child_wait(pid, pid, &feed, &status);       /* N4d: the one console loop */
+  sh_child_wait(pid, pid, &feed, &status);    /* the one console loop */
     if (feed >= 0) close(feed);
     sh_status_row(status);
 }
 
-/* ---- WO99 N4b: the bounded composition executor --------------------------
+/* ---- the bounded composition executor --------------------------
  * A parsed pipeline becomes real processes.  Every stage gets its three
  * descriptors explicitly - its own pipe ends, its redirection targets, the
  * console, /dev/null - and the PARSED argv is handed to the program: the
@@ -3820,7 +3820,7 @@ static int sh_builtin_class(const char *cmd) {
     if (sh_name_eq(cmd, "المسار") || sh_name_eq(cmd, "مساعدة")) return 1;
     if (sh_name_eq(cmd, "اخرج") || sh_name_eq(cmd, "انتقل") || sh_name_eq(cmd, "حرّر") ||
         sh_name_eq(cmd, "شغّل") || sh_name_eq(cmd, "متصفح")) return 2;
-    /* N4e: البيئة owns the parent session's own state (and its children's
+  /* البيئة owns the parent session's own state (and its children's
      * environment), so it is not a composition stage either.  Its setter is
      * the TWO-word `اضبط البيئة`, which this one-word table cannot see: that
      * refusal is drawn in sh_pipe_validate, where the whole stage is in hand,
@@ -3829,7 +3829,7 @@ static int sh_builtin_class(const char *cmd) {
     return 0;
 }
 
-/* WO99 N4a: the parsed representation of the committed line, one line to the
+/* the parsed representation of the committed line, one line to the
  * session's own log - stages, each stage's words, each redirection with its
  * kind and target.  The parse can therefore be read back and asserted on its
  * own, independently of what ran; fields are separated by U+001F, as the
@@ -3845,7 +3845,7 @@ static void sh_pipe_trace(const struct ShPipe *p, const char *line) {
         if (n < 0 || (size_t)n >= sizeof buf - used) return; \
         used += (size_t)n; \
     } while (0)
-    TR("[WO99] parse n=%d line=%s", p->nstage, line);
+  TR("parse n=%d line=%s", p->nstage, line);
     for (i = 0; i < p->nstage; ++i) {
         const struct ShStage *sg = &p->stage[i];
         for (j = 0; j < sg->argc; ++j) TR("\037w%d.%d=%s", i, j, sg->argv[j]);
@@ -3958,7 +3958,7 @@ static int sh_pipe_validate(const struct ShPipe *p, char paths[][4096],
         const char *cmd = p->stage[i].argv[0];
         int cls = sh_builtin_class(cmd);
         if (cls == 2) { sh_arg_refuse_composition(cmd); return 1; }
-        /* N4e: the session's environment setter is the two words اضبط البيئة,
+    /* the session's environment setter is the two words اضبط البيئة,
          * and the one-word class table above can only see اضبط - which is also
          * how a shipped program whose file name carries a space starts.  The
          * refusal is therefore drawn HERE, on the whole stage, by its own two
@@ -3992,7 +3992,7 @@ static int sh_pipe_execute(const struct ShPipe *p) {
     size_t logn[SH_STAGE_MAX];
     int infd[SH_STAGE_MAX], outfd[SH_STAGE_MAX], errfd[SH_STAGE_MAX];
     int pipes[SH_STAGE_MAX][2], fails[2] = { -1, -1 };
-    int cfeed = -1, console_in = -1;    /* N4d: the console, into stage 0 */
+  int cfeed = -1, console_in = -1;  /* the console, into stage 0 */
     int allfds[SH_STAGE_MAX * 4 + 4];
     pid_t pids[SH_STAGE_MAX], pgid = 0;
     int status[SH_STAGE_MAX];
@@ -4034,12 +4034,12 @@ static int sh_pipe_execute(const struct ShPipe *p) {
         if (outfd[i] < 0) outfd[i] = pipes[i][1];
         if (infd[i + 1] < 0) infd[i + 1] = pipes[i][0];
     }
-    /* N4d: does the feed's reader (stage 0) write into its neighbour's pipe?
+  /* does the feed's reader (stage 0) write into its neighbour's pipe?
      * If it has a '>' of its own, its output goes to that file and stays
      * useful even when every later stage has exited; if it does not, its
      * write end has no reader left the moment the last neighbour dies. */
     feed_to_pipe = (p->nstage > 1 && outfd[0] == pipes[0][1]);
-    /* N4d: the FIRST UNREDIRECTED STAGE reads the console.  Stage 0 is the
+  /* the FIRST UNREDIRECTED STAGE reads the console. Stage 0 is the
      * only stage that can be unredirected - every later stage's stdin is its
      * neighbour's pipe - so when stage 0 carries no '<' of its own, the parent
      * owns one pipe into it and moves the console's bytes there while the
@@ -4128,7 +4128,7 @@ static int sh_pipe_execute(const struct ShPipe *p) {
                 wargv[m] = NULL;
                 setenv("ARSH_SHELL", "1", 1);
                 /* The wrapper reads the caller's stdin only when that stdin is
-                 * the CONSOLE feed (N4d): then the stage gets a real pty with
+                 * the CONSOLE feed: then the stage gets a real pty with
                  * its line discipline, exactly as the ordinary and شغّل routes
                  * give theirs.  A '<' file, a neighbour's pipe or /dev/null
                  * stays the stage's own stdin and the wrapper must not touch
@@ -4192,7 +4192,7 @@ static int sh_pipe_execute(const struct ShPipe *p) {
     if (fails[1] >= 0) { close(fails[1]); fails[1] = -1; }
 
     /* wait for every stage; the console belongs to the first unredirected
-     * stage (N4d): its bytes go to that stage's stdin, ^C is SIGINT to the
+     * stage: its bytes go to that stage's stdin, ^C is SIGINT to the
      * pipeline's own process group and ^D ends that stage's input. */
     while (npid > 0) {
         struct pollfd pf[2];
@@ -4209,7 +4209,7 @@ static int sh_pipe_execute(const struct ShPipe *p) {
             ssize_t r = read(tty_fd, in, sizeof in);
             if (r > 0) sh_console_bytes(in, r, pgid, &cfeed);
         }
-        /* N4d: a stage that never started ENDS the console feed.  The feed
+    /* a stage that never started ENDS the console feed. The feed
          * exists for a reader that is part of a working pipeline; with a
          * stage that could not be launched the pipeline has a hole, so the
          * reader's bytes have nowhere to arrive and no downstream writer can
@@ -4229,7 +4229,7 @@ static int sh_pipe_execute(const struct ShPipe *p) {
             w = waitpid(pids[i], &status[i], WNOHANG);
             if (w == pids[i] || (w < 0 && errno != EINTR)) { pids[i] = -1; --npid; }
         }
-        /* N4d: when the feed's reader is the only stage left and it writes
+    /* when the feed's reader is the only stage left and it writes
          * into its neighbour's pipe, its bytes can no longer arrive anywhere:
          * the last reader of that pipe is gone.  One EOF - the same one ^D
          * gives - lets it finish, so a stage that died (or could never be
@@ -4263,7 +4263,7 @@ static int sh_pipe_execute(const struct ShPipe *p) {
 
     /* the pipeline's status is the LAST stage's; a single redirection-only
      * stage never reaches here (it keeps the ordinary path).  Same row, same
-     * Arabic wording and the same log line as the other two routes (N4d): the
+     * Arabic wording and the same log line as the other two routes: the
      * pipeline is not a second kind of execution. */
     last = p->nstage - 1;
     sh_log("composition last=%d status=%d exited=%d sig=%d", last, status[last],
@@ -4300,9 +4300,9 @@ static void sh_command_return(void) {
     (void)sh_paint();
 }
 
-/* ---- N4e: the session's own environment ----------------------------------
+/* ---- the session's own environment ----------------------------------
  * The console has no expansion syntax and grows none here: the setter takes a
- * NAME word and a VALUE word - exactly the two words the WO99 tokenizer
+ * NAME word and a VALUE word - exactly the two words the tokenizer
  * already produced - and keeps the value LITERALLY, byte for byte, whatever
  * it looks like.  setenv(3) is what carries it onward: every route forks from
  * this process and execs its child, so a later ordinary command, a شغّل and a
@@ -4373,20 +4373,20 @@ static void sh_env_show(void) {
     }
 }
 
-/* ---- WO109 / WO115: the navigation operand -------------------------------
+/* ---- the navigation operand -----------------------------------
  * `انتقل` takes ONE path.  The console's tokenizer splits on spaces and tabs
  * only (sh_parse), so a run of path characters typed without one arrives
  * whole.  Exactly ONE multiple-word form is accepted: the owner's own split
- * «. .» (REPORT-109 §109.1c - the typed separator between the dots), two
+ * «. .» (the typed separator between the dots), two
  * words that are each exactly one dot, resolved to the parent like «..».
  * Every OTHER line carrying a second operand is refused here - before any
  * path is built, before the phrase-level checks and before any filesystem
  * call - whatever its words are made of.
- * WO115 (audit F4).  Order 109 glued any run of words made solely of the
+ * An earlier implementation glued any run of words made solely of the
  * path-significant characters `.`, `/`, `~` into one path and let the
  * filesystem decide, so `انتقل .. ..` MOVED whenever a directory named `....`
  * existed and `انتقل / .` always moved to `/`: a genuine second operand was
- * accepted, not refused, and REPORT-109's "still refused" was conditional on
+ * accepted, not refused, and the refusal only occurred when
  * the glued path not existing.  Nothing is glued any more; a word that is not
  * the single dot is a genuine second operand.  Literal names stay reachable
  * through explicit relative paths (`.دليل`, `./المنزل`, `./~`): those are
@@ -4396,7 +4396,7 @@ static void sh_env_show(void) {
  * resolved BEFORE any filesystem call: the home comes from the session's
  * environment (getenv HOME, the same source sh_dir_display compares by
  * device+inode), never re-derived from a prompt string.
- * WO115: an expansion that does not FIT the caller's path buffer is refused
+ * an expansion that does not FIT the caller's path buffer is refused
  * (SH_SPLIT_MANY, the row naming the limit) rather than truncated into some
  * shorter path that might name a different directory.  Returns 0 with the
  * resolved path in `out`, or a refusal code for the consumer. */
@@ -4445,19 +4445,19 @@ static int sh_builtin(int argc, char **argv) {
     const char *cmd = argv[0];
     const char *arg = argc > 1 ? argv[1] : NULL;
     if (!cmd) return 0;
-    /* WO84: operands a built-in cannot take are refused, never dropped. */
+  /* operands a built-in cannot take are refused, never dropped. */
     if (sh_name_eq(cmd,"اخرج")) { if (argc != 1) sh_arg_refuse(cmd, SH_SPLIT_COUNT);
                                sh_exit_requested=1; return 2; }
     if (sh_name_eq(cmd,"المسار")) { char p[4096]; if (argc != 1) { sh_arg_refuse(cmd, SH_SPLIT_COUNT); return 1; } if(!getcwd(p,sizeof p)) { sh_emit_row("المسار: لا يوجد ملف أو دليل بهذا الاسم"); } else sh_emit_row(p); return 1; }
     if (sh_name_eq(cmd,"انتقل")) {
-        /* WO109: one operand, resolved by sh_nav_target (words, ~, a joined
+    /* one operand, resolved by sh_nav_target (words, ~, a joined
          * run); the paths and the refusal rows are otherwise unchanged. */
         char target[4096], row[4600];
         int joined = 0, rc;
         if (!arg) { sh_emit_row("انتقل: معامل مفقود"); return 1; }
         rc = sh_nav_target(argc, argv, target, sizeof target, &joined);
         if (rc) { sh_arg_refuse(cmd, rc); return 1; }
-        sh_log("[WO109] nav argc=%d typed=%s resolved=%s joined=%d", argc, arg, target, joined);
+    sh_log("nav argc=%d typed=%s resolved=%s joined=%d", argc, arg, target, joined);
         if (chdir(target)) {
             /* A joined run that is not a directory is refused in the command's
              * own multi-operand voice; a single operand quotes itself. */
@@ -4467,7 +4467,7 @@ static int sh_builtin(int argc, char **argv) {
         } else { char p[4096]; if(getcwd(p,sizeof p)){snprintf(row,sizeof row,"انتقل: %s",p);sh_emit_row(row);} }
         return 1;
     }
-    /* WO79 D2: حرّر opens the file in the console editor.  A leading operand
+  /* حرّر opens the file in the console editor. A leading operand
      * is the file's path as typed, resolved against the session's cwd; the
      * row حفظ: Ctrl+S in مساعدة is the owner's ruling of 2026-10-02. */
     if (sh_name_eq(cmd,"حرّر")) { if(!arg) { sh_emit_row("حرّر: معامل مفقود"); return 1; } if (argc > 2) { sh_arg_refuse(cmd, SH_SPLIT_COUNT); return 1; } return sh_edit_open(arg); }
@@ -4475,16 +4475,16 @@ static int sh_builtin(int argc, char **argv) {
      * rows fit the mini's 33x120 console after the six-row banner.  The lookup code and
      * its pinned اعرض usage / unknown-query answers remain unchanged. */
     if (sh_name_eq(cmd,"مساعدة")) { size_t i; if (argc > 2) { sh_arg_refuse(cmd, SH_SPLIT_COUNT); return 1; } if (!arg) { for(i=0;i<SH_HELP_ROWS;i++) if(sh_emit_row_spaced(sh_help_rows[i],i==0))return 1; return 1; } if(sh_name_eq(arg,"اعرض"))sh_emit_row("اعرض: الاستخدام: اعرض مسار"); return sh_help_lookup(arg); }
-    /* 73: the operand runs through the SAME wrapped child path as ordinary
+  /* The operand runs through the SAME wrapped child path as ordinary
      * commands ({sh_wrapper, sh_shell, "-c", arg}, ARSH_SHELL=1, stdin
      * /dev/null, its own process group) so its output is shaped exactly once
      * by شكل.  The exit-status row keeps its meaning: the wrapper exits with
      * the child's status. */
     if (sh_name_eq(cmd,"شغّل")) { if(!arg){sh_emit_row("شغّل: معامل مفقود");return 1;} sh_run_program(argc, argv); return 1; }
-    /* WO85 D2: متصفح الصفحات <ملف|برنامج> ... opens the pager on logical
+  /* متصفح الصفحات <ملف|برنامج> ... opens the pager on logical
      * text - a file the filesystem has, or a program's captured stdout. */
     if (sh_name_eq(cmd,"متصفح")) { if (argc < 2 || !sh_name_eq(argv[1],"الصفحات")) { sh_emit_row("متصفح الصفحات: الاستخدام: متصفح الصفحات ملف"); return 1; } return sh_pg_open(argc - 2, argv + 2); }
-    /* N4e: the parent session's environment.  `البيئة` shows what this
+  /* the parent session's environment. `البيئة` shows what this
      * session assigned; `اضبط البيئة NAME VALUE` sets one.  The setter's
      * command word is اضبط and البيئة is the word that selects this built-in,
      * so any other second word falls through to the ordinary spawn and a
@@ -4500,7 +4500,7 @@ static int sh_builtin(int argc, char **argv) {
     return 0;
 }
 
-/* Run the committed line.  N4d: the child gets its stdin from the CONSOLE
+/* Run the committed line. The child gets its stdin from the CONSOLE
  * through the same pipe-and-pump an ordinary composition stage and شغّل use -
  * the shell no longer hands it /dev/null and no longer throws typed bytes
  * away.  stdout/stderr are the real console tty, it leads its own process
@@ -4519,8 +4519,8 @@ static void sh_run_command(void) {
     linebuf[n] = 0;
     cname[0] = 0;
 
-    /* WO107 107.1: an Enter on an EMPTY line is a SUBMISSION, not a no-op.
-     * Order 106 §3.2 measured the shipped build leaving the screen byte-identical
+  /* an Enter on an EMPTY line is a SUBMISSION, not a no-op.
+   * A measured run left the screen byte-identical
      * for it (no fresh prompt, no حالة الخروج row) while every real submission
      * produced both.  There is no word for the tokenizer to take, so the layer
      * says so in its OWN voice — nothing is forked, nothing runs — and then
@@ -4536,7 +4536,7 @@ static void sh_run_command(void) {
     }
 
     sh_history_push();
-    /* WO84: the session's tokenizer owns the line first.  A refusal (unmatched
+  /* the session's tokenizer owns the line first. A refusal (unmatched
      * quote, an unsupported composition operator, too many arguments) draws
      * its row and returns to the prompt: nothing is forked, nothing runs. */
     {
@@ -4554,12 +4554,12 @@ static void sh_run_command(void) {
             int one = sh_resolve_stage_name(&pp.stage[stage]);
             if (stage == 0) changed = one;
         }
-        /* N4d: the command's own name, kept for a launch failure's row now
+    /* the command's own name, kept for a launch failure's row now
          * that the spawn happens outside this block. */
         if (pp.stage[0].argc) snprintf(cname, sizeof cname, "%s", pp.stage[0].argv[0]);
-        /* WO99 N4a: the parsed representation, logged before anything runs. */
+    /* the parsed representation, logged before anything runs. */
         sh_pipe_trace(&pp, linebuf);
-        /* WO99 N4b: a line that really composes - more than one stage, or any
+    /* a line that really composes - more than one stage, or any
          * redirection - takes the executor; everything else keeps the shipped
          * single-stage path byte for byte. */
         {
@@ -4576,7 +4576,7 @@ static void sh_run_command(void) {
         }
         if (sh_builtin(pp.stage[0].argc, (char **)pp.stage[0].argv)) {
         if (sh_exit_requested) return;
-        /* WO79 D2: حرّر hands the line to the editor - the file's current
+    /* حرّر hands the line to the editor - the file's current
          * line, not an empty prompt, is what the live region must paint. */
         if (!sh_ed_active) { lines[0].len = 0; sh_caret = 0; }
         /* D3F: sh_emit_row() now ends every built-in row with a real CR LF, so
@@ -4610,7 +4610,7 @@ static void sh_run_command(void) {
      * ways the editor cannot count. */
     pointer_visible = 0;
 
-    /* N4d: the console is the child's stdin, through the one pipe-and-pump the
+  /* the console is the child's stdin, through the one pipe-and-pump the
      * other two routes use.  The write end is CLOEXEC so no descendant of this
      * session can inherit it and hold the reader's EOF open. */
     if (pipe(pfd) != 0) {
@@ -4756,7 +4756,7 @@ static int shell_loop(void) {
             int again = 1;
             while (again) {
                 again = 0;
-                /* WO85: while the pager is open it owns every byte - its own
+        /* while the pager is open it owns every byte - its own
                  * ESC/CSI handling and its own key set - so the prompt's
                  * decoder is not fed at all and the line stays untouched. */
                 if (sh_pg_active) { if (sh_pg_feed(b)) return -1; continue; }
@@ -4783,9 +4783,9 @@ static int shell_loop(void) {
                         int shifted = (p1 == 1 && p2 == 2);
                         state = NORMAL;
                         if (shifted) continue;   /* Shift+Arrow: out of scope (no selection) */
-                        /* WO79 D2 built the editor around ONE line, so Up/Down
+                        /* The editor was built around ONE line, so Up/Down
                          * had no history to recall there and were dropped.
-                         * WO83: in the editor Up/Down walk the buffer's lines
+                         * In the editor Up/Down walk the buffer's lines
                          * (the viewport follows); at the prompt they still
                          * recall the shell's history.  PageUp/PageDown move by
                          * a viewport of lines and are inert at the prompt.
@@ -4813,7 +4813,7 @@ static int shell_loop(void) {
                         if (*q < 1000000) *q = *q * 10 + b - '0'; continue; }
                     continue;
                 }
-                /* WO85 D4: Tab completes the prompt line's last word.  While
+        /* Tab completes the prompt line's last word. While
                  * the editor owns the line Tab keeps its old byte meaning -
                  * this order does not touch the editor's own contract. */
                 if (b == 9 && !need && !sh_ed_active) { sh_complete(); continue; }
@@ -4821,12 +4821,12 @@ static int shell_loop(void) {
                 if (b == 0 && !need) { latin_mode = !latin_mode;
                                        if (sh_paint()) return -1; continue; }
                 if (b == 0x1b && !need) { state = ESC; continue; }
-                /* WO79 D2: Ctrl+S saves the file being edited, Ctrl+Q leaves it.
+        /* Ctrl+S saves the file being edited, Ctrl+Q leaves it.
                  * Outside the editor both keys do nothing (no shell meaning). */
                 if (b == 0x13 && !need) { if (sh_ed_active) (void)sh_ed_save(); continue; }
                 if (b == 0x11 && !need) { if (sh_ed_active) sh_ed_quit(); continue; }
                 /* Ctrl+D exits ONLY on an empty line; otherwise byte-for-byte
-                 * nothing - and never from the editor (WO79 D2: a stray EOF
+         * nothing - and never from the editor (a stray EOF
                  * must not lose the buffer). */
                 if (b == 4 && !need) { if (!sh_ed_active && lines[0].len == 0) return 0; continue; }
                 /* Ctrl+C at the prompt abandons the line (never exits); in the
@@ -4847,8 +4847,8 @@ static int shell_loop(void) {
                     if (sh_ed_active && lines[0].len != bl) sh_ed_dirty = 1;
                     if (sh_paint()) return -1; continue; }
                 if ((b == '\r' || b == '\n') && !need) {
-                    if (sh_ed_active) sh_ed_newline();   /* WO79 D2: append a file line */
-                    else sh_run_command();   /* WO107 107.1: an empty line submits too */
+          if (sh_ed_active) sh_ed_newline();  /* append a file line */
+          else sh_run_command();  /* an empty line submits too */
                     if (sh_exit_requested) return 0;
                     continue;
                 }
@@ -4905,7 +4905,7 @@ int main(int argc, char **argv) {
     if (tcsetattr(tty_fd, TCSANOW, &raw)) return 1;
     atexit(restore_terminal);
     signal(SIGINT, on_signal); signal(SIGTERM, on_signal); signal(SIGHUP, on_signal);
-    /* WO84: شغّل feeds its child through a pipe; a child that exits first must
+  /* شغّل feeds its child through a pipe; a child that exits first must
      * make the write fail with EPIPE, not kill the session with SIGPIPE. */
     signal(SIGPIPE, SIG_IGN);
 

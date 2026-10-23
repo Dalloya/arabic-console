@@ -40,7 +40,7 @@ TRANSPARENT = frozenset(
 )
 RIGHT_ONLY=set(cp for cp, jt in UNICODE_JOINING_TYPES.items() if jt == "R")
 NAME={v:k for k,v in LETTERS.items()}
-# Task 45: the lam-alef ligature.  A LAM whose next joining neighbour is one of
+# the lam-alef ligature. A LAM whose next joining neighbour is one of
 # these ALEF variants collapses with it into ONE glyph and ONE cell.  The alef
 # of the pair never joins forward, so only two forms exist: isolated (the
 # letter before the lam does not join forward) and final (it does).  The
@@ -94,7 +94,7 @@ def join_word(word):
             out.append((chars[i], "transparent" if joining_type(chars[i]) == "T" else "unknown")); i+=1; continue
         alef=lam_alef_index(chars, i)
         if alef is not None:
-            # Task 45: LAM + ALEF variant become ONE ligature cell.  The form
+      # LAM + ALEF variant become ONE ligature cell. The form
             # is chosen only by the letter before the lam; the pair itself
             # never joins forward (the alef is Right_Joining).  Marks between
             # the two stay transparent and keep their own cells.

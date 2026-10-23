@@ -86,7 +86,7 @@ def main() -> None:
         if codepoint <= 0xF7FF and codepoint != 0x2026:
             return value
         if codepoint == 0x2026:
-            # Work order 49 keeps the ellipsis and pins it to F244, the
+            # The ellipsis is kept and pinned to F244, the
             # function number it has always carried.
             function = "F244"
         else:
@@ -126,14 +126,14 @@ def main() -> None:
         "keycode 126 = Meta_R",
     ]
 
-    # Level 1 and 2 follow ara(basic), including its punctuation. Work order
-    # 49 removed the four precomposed lam-alef ligature keys (the shaper
-    # forms the ligature from lam+alef): their levels are VoidSymbol so they
-    # emit nothing, instead of falling back to the US base row's Latin.
+    # Level 1 and 2 follow ara(basic), including its punctuation. The map
+    # omits the four precomposed lam-alef ligature keys (the shaper forms the
+    # ligature from lam+alef): their levels are VoidSymbol so they emit
+    # nothing, instead of falling back to the US base row's Latin.
     # `any` intentionally leaves the US map's unused value alone rather than
     # inventing a character.
     removed_ligatures = {"U+FEF5", "U+FEF7", "U+FEF9", "U+FEFB"}
-    # Work order R1-D1: the physical b levels are private sentinels rather
+    # The physical b levels are private sentinels rather
     # than VoidSymbol.  The editor drops them in Arabic mode and translates
     # them to b/B in Latin mode; this preserves the freed-level behavior while
     # making the physical key usable when explicitly typing Latin.

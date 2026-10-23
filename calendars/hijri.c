@@ -1,5 +1,4 @@
-/* layer1/hijri.c — the Hijri date tool for the Arabic-first console (work
- * order 57).
+/* layer1/hijri.c — the Hijri date tool for the Arabic-first console.
  *
  * Prints the day's date in both calendars: the Hijri date with Arabic month
  * names, and the Gregorian date beside it, in LOGICAL (right-to-left reading)
@@ -9,7 +8,7 @@
  *
  *     شكل hijri            (or: شكل تاريخ — the same binary under an Arabic name)
  *
- * WHICH CALENDAR THIS IS — stated exactly, as the work order demands:
+ * WHICH CALENDAR THIS IS — stated exactly:
  *
  *   UMM AL-QURA, the official civil calendar of Saudi Arabia.  Its months
  *   are not a closed formula; they follow the kingdom's published table.
@@ -41,7 +40,7 @@
 
 #include "umalqurra.h"
 
-/* Arabic month names, in the work order's own spelling (ربيع الآخر etc.). */
+/* Arabic month names, in the project's own spelling (ربيع الآخر etc.). */
 static const char *const MONTH_NAMES[12] = {
     "محرم",                 /* 1 */
     "صفر",                  /* 2 */

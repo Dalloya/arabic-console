@@ -19,7 +19,7 @@ static const struct MarkCell dedicated_mark_cells[] = {
  {0x0670,0xE008,0xE018},
 };
 #define DEDICATED_MARK_CELL_COUNT (sizeof(dedicated_mark_cells) / sizeof(dedicated_mark_cells[0]))
-/* Task 54: a shadda (U+0651) immediately followed by one of these six vowels
+/* a shadda (U+0651) immediately followed by one of these six vowels
  * collapses with it into ONE stacked cell - the plain cell, or the connector
  * variant when the letter the marks belong to joins forward.  The vowel order
  * below is shadda_combo_codepoint's own index mapping, read out of the same

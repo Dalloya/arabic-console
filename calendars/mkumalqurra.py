@@ -2,7 +2,7 @@
 """layer1/mkumalqurra.py — generate layer1/umalqurra.h (the Umm al-Qura
 month-start table as Rata Die numbers) and verify it against published data.
 
-Which calendar this is (work order 57 deliverable 2, the exactness question):
+Which calendar this is (the exactness question):
 
   UMM AL-QURA — the official civil calendar of Saudi Arabia.  Its month
   starts are not a closed formula: they are published, month by month, from
@@ -24,7 +24,7 @@ Which calendar this is (work order 57 deliverable 2, the exactness question):
   NOT the tabular (arithmetic) Islamic calendar: that one is a pure formula
   (30-year leap cycle) and differs from the official Saudi calendar by up to
   ±2 days.  The deltas are printed below for the same dates — the measured
-  size of the disagreement the work order asked for.  The tabular side uses
+ size of the requested comparison. The tabular side uses
   the "Kuwaiti algorithm" (epoch 1 Muharram 1 AH = 19 July 622 CE Gregorian
   proleptic = RD 227015; leap years ((11*y+14) mod 30) < 11), cross-checked
   here against the independent convertdate implementation.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Work order 65: the Arabic-native editor's own suite.
+"""the Arabic-native editor's own suite.
 
 Drives out/ar-shell on a pty through a minimal console model (the editor's
 output is simple: CR/LF, CSI-K clear-line, CSI-nC cursor-forward, SGR, and
@@ -208,7 +208,7 @@ def wait_exit(s, timeout=1.5):
 
 # ---------------------------------------------------------------------------
 def main():
-    print("=== work order 65: the Arabic-native editor's own suite ===")
+    print("=== the Arabic-native editor's own suite ===")
 
     # S1: child argv + ARSH_SHELL=1 + stdin /dev/null ------------------------
     print("\n--- S1: the committed line is executed through شكل bash -c ---")
