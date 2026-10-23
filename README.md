@@ -43,8 +43,9 @@ labels.
    `متصفح`, `البيئة` are handled inside the session itself — the file editor, the pager,
    the help table, the environment, the exit.
 5. **Everything else is a program.** Pipelines and redirections run through the session's
-   own fork/exec/reap executor. The last hop leaves through
-   `شكل /bin/bash -c '<quoted words>'` so the child's output comes back shaped.
+   own fork/exec/reap executor. The last hop leaves through `شكل` with the parsed words as
+   a vector — `{شكل, /bin/bash, -c, "$@", bash, words…}` — so the child's output comes back
+   shaped and bash never parses the line a second time.
 
 ## The commands
 
@@ -175,8 +176,10 @@ Eight tashkeel marks on SHIFT, the same eight the Sakhr AX-170 ROM carries:
 - Target is the kernel VT. Under a terminal emulator the session runs in pass-through and
   is not useful.
 - Tested on Arch Linux on real hardware and on an MSX-era font budget of 512 cells.
-- The child of a command still leaves through `bash -c`. The parser and the executor are
-  ours; the last exec hop is not.
+- The child of a command still runs inside `bash`, hosted by `شكل`, which owns the pty. Bash
+  does not parse the line: the words arrive as a vector.
+- Because of that, bash's own expansions do not apply. `*` reaches the program literally and
+  `$VAR` is not expanded. The session's tokenizer is the only grammar.
 - The two help tables proposal (an English twin of `مساعدة`) was considered and dropped.
   There is one help table, in Arabic.
 
